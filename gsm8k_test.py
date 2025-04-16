@@ -70,13 +70,15 @@ def extract_ground_truth(answer):
 
 # Create prompt template
 prompt_template = """
-Solve the following math problem step-by-step and provide purely numeric answer:
+Solve the following math problem step-by-step and provide a purely numeric answer:
 
 Problem: {question}
 
 <think>
 """
 # TODO: add thinking section for COCONUT
+
+correct_template = '\\[\n\\boxed{{{}}}\n\\]'
 
 # Evaluation loop
 correct = 0
