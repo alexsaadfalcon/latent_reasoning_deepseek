@@ -26,7 +26,7 @@ def main():
     # Set up data
     print("Loading GSM8K dataset")
     batch_size = 4
-    dataloader = get_gsm8k_dataloader(batch_size=batch_size)
+    dataloader = get_gsm8k_dataloader(tokenizer, batch_size=batch_size)
     
     # Set up optimizer and scheduler
     learning_rate = 5e-5
