@@ -18,13 +18,17 @@ def format_gsm8k_example(example):
   completion = parse_answer(answer)
   return context, completion
 
-def get_gsm8k_dataloader(batch_size=4):
+def get_gsm8k_dataloader(tokenizer, batch_size=4, block_size=512):
+  pad_token_id = tokenizer.pad_token_id
+  def _collate_batch(batch):
+    return collate_batch(batch, tokenizer, pad_token_id, block_size=block_size)
+
   train_dataset = get_gsm8k()
   train_data = [(format_gsm8k_example(example)) for example in train_dataset]
   dataloader = DataLoader(
       train_data,
       batch_size=batch_size,
       shuffle=True,
-      collate_fn=collate_batch
+      collate_fn=_collate_batch
   )
   return dataloader
