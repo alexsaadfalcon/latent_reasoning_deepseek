@@ -18,6 +18,7 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=3
     device = next(model.parameters()).device
     
     # Tokenize the prompt
+    B = input_ids.shape[0]
     prompt_length = input_ids.shape[1]
     
     # Get initial embeddings
@@ -50,7 +51,7 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=3
         # Update attention mask
         all_attention_mask = torch.cat([
             all_attention_mask,
-            torch.ones((1, 1), device=device)
+            torch.ones((B, 1), device=device)
         ], dim=1)
         
         # Mark this position as a latent reasoning step
