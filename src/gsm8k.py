@@ -24,7 +24,7 @@ def get_gsm8k_dataloader(tokenizer, batch_size=4, block_size=512):
     return collate_batch(batch, tokenizer, pad_token_id, block_size=block_size)
 
   train_dataset = get_gsm8k()
-  train_data = [(format_gsm8k_example(example)) for example in train_dataset]
+  train_data = [format_gsm8k_example(example) for example in train_dataset]
   dataloader = DataLoader(
       train_data,
       batch_size=batch_size,

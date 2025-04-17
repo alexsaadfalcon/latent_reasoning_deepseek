@@ -150,11 +150,17 @@ def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=5, 
     visible_text = tokenizer.decode(visible_tokens, skip_special_tokens=True)
     
     # Format the result to indicate reasoning occurred
-    full_text = visible_text.split(" ", 1)
-    if len(full_text) > 1:
-        result = f"{full_text[0]} ***thinking*** {full_text[1]}"
+    # Split the visible text into prompt and response
+    # The prompt is the original input provided by the user
+    prompt_text = prompt
+    
+    # Find where the response starts (after the prompt)
+    if visible_text.startswith(prompt):
+        response_text = visible_text[len(prompt):].strip()
+        result = f"{prompt_text} ***thinking*** {response_text}"
     else:
-        result = f"***thinking*** {visible_text}"
+        # Fallback in case there's any issue with exact matching
+        result = f"{prompt_text} ***thinking*** {visible_text[len(prompt_text):].strip()}"
     
     return result
 
