@@ -37,32 +37,31 @@ def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=5, 
     token_types = torch.zeros((1, prompt_length), device=device)  # Start with all prompt tokens
     
     # Phase 1: Latent reasoning steps
-    with torch.no_grad():
-        for step in range(reasoning_steps):
-            # Forward pass with current embeddings
-            outputs = model(
-                inputs_embeds=all_embeddings,
-                attention_mask=all_attention_mask,
-                output_hidden_states=True
-            )
-            
-            # Get the last hidden state
-            last_hidden_state = outputs.hidden_states[-1][:, -1:, :]
-            
-            # Append the hidden state to our embeddings
-            all_embeddings = torch.cat([all_embeddings, last_hidden_state], dim=1)
-            
-            # Update attention mask
-            all_attention_mask = torch.cat([
-                all_attention_mask,
-                torch.ones((1, 1), device=device)
-            ], dim=1)
-            
-            # Mark this position as a latent reasoning step
-            token_types = torch.cat([
-                token_types,
-                torch.ones((1, 1), device=device)  # 1 = latent reasoning
-            ], dim=1)
+    for step in range(reasoning_steps):
+        # Forward pass with current embeddings
+        outputs = model(
+            inputs_embeds=all_embeddings,
+            attention_mask=all_attention_mask,
+            output_hidden_states=True
+        )
+        
+        # Get the last hidden state
+        last_hidden_state = outputs.hidden_states[-1][:, -1:, :]
+        
+        # Append the hidden state to our embeddings
+        all_embeddings = torch.cat([all_embeddings, last_hidden_state], dim=1)
+        
+        # Update attention mask
+        all_attention_mask = torch.cat([
+            all_attention_mask,
+            torch.ones((1, 1), device=device)
+        ], dim=1)
+        
+        # Mark this position as a latent reasoning step
+        token_types = torch.cat([
+            token_types,
+            torch.ones((1, 1), device=device)  # 1 = latent reasoning
+        ], dim=1)
     
     # Phase 2: Add </think> token to mark end of reasoning
     think_end_tokens = tokenizer.encode("</think>", add_special_tokens=False)
