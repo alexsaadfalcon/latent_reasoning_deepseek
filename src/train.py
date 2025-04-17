@@ -27,9 +27,9 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
           scheduler.step()
           optimizer.zero_grad()
 
-          print(f"Epoch {epoch+1} 
-                {math.ceil((i + 1) / batch_size / gradient_accumulation_steps)}
-                /{num_update_steps} - loss: {loss.item() :2.4f}", end="\r")
+          print(f"Epoch {epoch+1} "
+                f"{math.ceil((i + 1) / batch_size / gradient_accumulation_steps)}"
+                f"/{num_update_steps} - loss: {loss.item() :2.4f}", end="\r")
 
       # record loss
       with open("loss.txt", "a") as f:
