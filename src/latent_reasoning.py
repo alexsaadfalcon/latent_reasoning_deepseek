@@ -2,6 +2,65 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
+def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=30):
+    """
+    Generate text with latent reasoning steps before visible token generation.
+    
+    Args:
+        model: The language model
+        input_ids: the tokenized prompt
+        reasoning_steps: Number of latent reasoning steps
+        max_new_tokens: Maximum number of visible tokens to generate
+        
+    Returns:
+        Generated text with reasoning steps masked
+    """
+    device = next(model.parameters()).device
+    
+    # Tokenize the prompt
+    prompt_length = input_ids.shape[1]
+    
+    # Get initial embeddings
+    embedding_layer = model.get_input_embeddings()
+    prompt_embeddings = embedding_layer(input_ids)
+    
+    # Initialize our tracking variables
+    all_embeddings = prompt_embeddings
+    all_attention_mask = attention_mask
+    
+    # Keep track of which positions are latent reasoning steps
+    # 0 = prompt token, 1 = latent reasoning, 2 = generated token
+    token_types = torch.zeros((1, prompt_length), device=device)  # Start with all prompt tokens
+    
+    # Phase 1: Latent reasoning steps
+    for step in range(reasoning_steps):
+        # Forward pass with current embeddings
+        outputs = model(
+            inputs_embeds=all_embeddings,
+            attention_mask=all_attention_mask,
+            output_hidden_states=True
+        )
+        
+        # Get the last hidden state
+        last_hidden_state = outputs.hidden_states[-1][:, -1:, :]
+        
+        # Append the hidden state to our embeddings
+        all_embeddings = torch.cat([all_embeddings, last_hidden_state], dim=1)
+        
+        # Update attention mask
+        all_attention_mask = torch.cat([
+            all_attention_mask,
+            torch.ones((1, 1), device=device)
+        ], dim=1)
+        
+        # Mark this position as a latent reasoning step
+        token_types = torch.cat([
+            token_types,
+            torch.ones((1, 1), device=device)  # 1 = latent reasoning
+        ], dim=1)
+    
+    return all_embeddings, all_attention_mask, token_types
+
 def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=5, max_new_tokens=50):
     """
     Generate text with latent reasoning steps before visible token generation.
