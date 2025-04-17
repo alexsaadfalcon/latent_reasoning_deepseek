@@ -58,4 +58,10 @@ def apply_lora(model):
     # replace
     module_list[-2].__setattr__(name_struct[-1], lora)
   
+  for name, param in model.named_parameters():
+    if "lora_right" in name or "lora_left" in name:
+      param.requires_grad = True
+    else:
+      param.requires_grad = False
+  
   print('new model:', model)
