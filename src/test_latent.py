@@ -33,8 +33,8 @@ def main():
   ]
 
   # Process examples in batch
-  # batch_inputs = tokenizer(test_examples, padding=True, return_tensors="pt").to(device)
-  batch_inputs = tokenizer(test_examples, padding=True, padding_side='right', return_tensors="pt").to(device)
+  batch_inputs = tokenizer(test_examples, padding=True, return_tensors="pt").to(device)
+  # batch_inputs = tokenizer(test_examples, padding=True, padding_side='right', return_tensors="pt").to(device)
   input_ids = batch_inputs.input_ids
   attention_mask = batch_inputs.attention_mask
   print(attention_mask)
