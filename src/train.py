@@ -22,6 +22,16 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
         # )
         # loss = F.cross_entropy(outputs.logits.transpose(1,2), labels)
         embeds, all_masks, _ = latent_reasoning_forward(model, inputs, masks)
+        print(inputs)
+        print(labels)
+        from transformers import AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B")
+        print('input0', tokenizer.decode(inputs[0]))
+        # Filter out -100 padding tokens before decoding
+        filtered_labels = labels[0].clone()
+        filtered_labels = filtered_labels[filtered_labels != -100]
+        print('label0', tokenizer.decode(filtered_labels))
+        exit()
         loss = latent_plus_answer_loss(model, embeds, all_masks, labels)
         loss.backward()
         if ((i + 1) % gradient_accumulation_steps == 0) or \

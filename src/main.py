@@ -16,6 +16,10 @@ def main():
     print(f"Loading model: {model_name}")
     
     tokenizer = AutoTokenizer.from_pretrained(model_name)
+    start_think_id = tokenizer.encode('<think>', add_special_tokens=False)
+    stop_think_id = tokenizer.encode('</think>', add_special_tokens=False)
+    newline_id = tokenizer.encode('\n', add_special_tokens=False)
+    print('start/stop think ids', start_think_id, stop_think_id, newline_id)
     model = AutoModelForCausalLM.from_pretrained(model_name)
     model.to(device)
     
@@ -26,8 +30,8 @@ def main():
     
     # Set up data
     print("Loading GSM8K dataset")
-    batch_size = 2
-    dataloader = get_gsm8k_dataloader(tokenizer, batch_size=batch_size)
+    batch_size = 4
+    dataloader = get_gsm8k_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     # Set up optimizer and scheduler
     learning_rate = 5e-5

@@ -25,6 +25,8 @@ def get_gsm8k_dataloader(tokenizer, batch_size=4, block_size=128):
 
   train_dataset = get_gsm8k()
   train_data = [format_gsm8k_example(example) for example in train_dataset]
+  print(train_data[0])
+  input()
   dataloader = DataLoader(
       train_data,
       batch_size=batch_size,
