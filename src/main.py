@@ -1,7 +1,7 @@
 import os
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, get_linear_schedule_with_warmup
-from gsm8k import get_gsm8k_dataloader
+from gsm8k import get_gsm8k_latent_dataloader
 from lora import apply_lora
 from train import train_latent
 from latent_reasoning import generate_with_latent_reasoning
@@ -31,7 +31,7 @@ def main():
     # Set up data
     print("Loading GSM8K dataset")
     batch_size = 4
-    dataloader = get_gsm8k_dataloader(tokenizer, batch_size=batch_size, block_size=128)
+    dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     # Set up optimizer and scheduler
     learning_rate = 5e-5

@@ -25,12 +25,29 @@ def get_gsm8k_dataloader(tokenizer, batch_size=4, block_size=128):
 
   train_dataset = get_gsm8k()
   train_data = [format_gsm8k_example(example) for example in train_dataset]
-  print(train_data[0])
-  input()
   dataloader = DataLoader(
       train_data,
       batch_size=batch_size,
       shuffle=True,
       collate_fn=_collate_batch
   )
+  return dataloader
+
+def get_gsm8k_latent_dataloader(tokenizer, batch_size=4, block_size=128):
+  """Create a dataloader specifically for latent reasoning training"""
+  pad_token_id = tokenizer.pad_token_id
+  
+  def _collate_batch_latent(batch):
+    return collate_batch_latent(batch, tokenizer, pad_token_id, block_size=block_size)
+  
+  train_dataset = get_gsm8k()
+  train_data = [format_gsm8k_example(example) for example in train_dataset]
+  
+  dataloader = DataLoader(
+      train_data,
+      batch_size=batch_size,
+      shuffle=True,
+      collate_fn=_collate_batch_latent
+  )
+  
   return dataloader

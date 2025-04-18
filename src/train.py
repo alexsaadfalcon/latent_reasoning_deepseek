@@ -16,11 +16,7 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
     model.train()
     for i, (inputs, labels, masks) in enumerate(dataloader):
       with torch.set_grad_enabled(True):
-        # outputs = model(
-        #     input_ids=inputs,
-        #     attention_mask=masks,
-        # )
-        # loss = F.cross_entropy(outputs.logits.transpose(1,2), labels)
+        # Process the input through latent reasoning
         embeds, all_masks, _ = latent_reasoning_forward(model, inputs, masks)
         print(inputs)
         print(labels)

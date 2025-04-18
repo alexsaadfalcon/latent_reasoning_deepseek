@@ -1,4 +1,3 @@
-
 import torch
 
 def parse_answer(answer):
@@ -48,9 +47,81 @@ def collate_batch(batch, tokenizer, pad_token_id, device='cuda', block_size=128)
   inputs = [pad_tokens(t, block_size, pad_token_id) for t in inputs]
   masks = [pad_tokens(t, block_size, pad_token_id) for t in masks]
   labels = [pad_tokens(t, block_size, -100) for t in labels]
+  print(inputs[0])
+  print(masks[0])
+  print(labels[0])
+  input()
   # convert to tensor
   inputs = torch.tensor(inputs, dtype=torch.int64).to(device)
   masks = torch.tensor(masks, dtype=torch.int64).to(device)
   labels = torch.tensor(labels, dtype=torch.int64).to(device)
   return inputs, labels, masks
+
+def collate_batch_latent(batch, tokenizer, pad_token_id, device='cuda', block_size=128):
+  # For latent reasoning, we separate the inputs (questions) and answers
+  # The questions will be used as input, and the answers as labels
+  
+  # Extract questions and answers from batch
+  question_list = list(zip(*batch))[0]
+  answer_list = list(zip(*batch))[1]
+  
+  # Tokenize questions (these will be inputs)
+  question_tokens = tokenizer(question_list, padding=False)["input_ids"]
+  
+  # Tokenize answers (these will be labels)
+  answer_tokens = tokenizer(answer_list, padding=False)["input_ids"]
+  print(question_tokens.shape)
+  print(answer_tokens.shape)
+  input()
+
+  # Process question tokens - these are the inputs
+  input_tokens = [pad_tokens(t, block_size, pad_token_id) for t in question_tokens]
+  input_masks = [[1] * len(t[:block_size]) + [0] * (block_size - min(len(t), block_size)) for t in question_tokens]
+  
+  # Process answer tokens - these are the labels
+  # For labels, we want to create a tensor of the expected output after the latent reasoning
+  label_tokens = [pad_tokens(t, block_size, -100) for t in answer_tokens]
+  
+  # Convert to tensors
+  inputs = torch.tensor(input_tokens, dtype=torch.int64).to(device)
+  masks = torch.tensor(input_masks, dtype=torch.int64).to(device)
+  labels = torch.tensor(label_tokens, dtype=torch.int64).to(device)
+  
+  return inputs, labels, masks
+
+def prepare_latent_reasoning_batch(questions, answers, latent_steps, tokenizer, pad_token_id, device='cuda', block_size=128):
+  """
+  Prepares a batch for latent reasoning training.
+  
+  Args:
+      questions: List of question strings
+      answers: List of answer strings
+      latent_steps: Number of latent reasoning steps to perform
+      tokenizer: The tokenizer to use
+      pad_token_id: The padding token ID
+      device: The device to place tensors on
+      block_size: Maximum sequence length
+      
+  Returns:
+      Tuple of (input_ids, attention_mask, labels)
+      Where:
+      - input_ids are the tokenized questions
+      - attention_mask is the mask for the inputs
+      - labels are the tokenized answers
+  """
+  # Tokenize questions (inputs)
+  question_result = tokenizer(questions, padding=True, return_tensors="pt")
+  input_ids = question_result["input_ids"].to(device)
+  attention_mask = question_result["attention_mask"].to(device)
+  
+  # Tokenize answers (labels)
+  answer_result = tokenizer(answers, padding=True, return_tensors="pt")
+  label_ids = answer_result["input_ids"].to(device)
+  
+  # Replace padding tokens with -100 in labels so they're ignored in loss computation
+  label_mask = label_ids != pad_token_id
+  labels = torch.where(label_mask, label_ids, -100 * torch.ones_like(label_ids))
+  
+  return input_ids, attention_mask, labels
+
 
