@@ -14,17 +14,17 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
   for epoch in range(num_epochs):
     optimizer.zero_grad()
     model.train()
-    for i, (inputs, labels, masks) in enumerate(dataloader):
+    for i, (question, question_mask, answer, answer_mask) in enumerate(dataloader):
       with torch.set_grad_enabled(True):
         # Process the input through latent reasoning
-        embeds, all_masks, _ = latent_reasoning_forward(model, inputs, masks)
-        print(inputs)
-        print(labels)
+        embeds, all_masks, _ = latent_reasoning_forward(model, question, question_mask)
+        print(question)
+        print(answer)
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B")
-        print('input0', tokenizer.decode(inputs[0]))
+        print('input0', tokenizer.decode(question[0]))
         # Filter out -100 padding tokens before decoding
-        filtered_labels = labels[0].clone()
+        filtered_labels = answer[0].clone()
         filtered_labels = filtered_labels[filtered_labels != -100]
         print('label0', tokenizer.decode(filtered_labels))
         exit()
