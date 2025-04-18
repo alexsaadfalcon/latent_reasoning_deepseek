@@ -3,6 +3,7 @@ import math
 import torch
 from torch.nn import functional as F
 
+from latent_reasoning import latent_reasoning_forward, latent_plus_answer_loss
 
 def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
                  gradient_accumulation_steps=16, num_epochs=2):
@@ -15,11 +16,15 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
     model.train()
     for i, (inputs, labels, masks) in enumerate(dataloader):
       with torch.set_grad_enabled(True):
-        outputs = model(
-            input_ids=inputs,
-            attention_mask=masks,
-        )
-        loss = F.cross_entropy(outputs.logits.transpose(1,2), labels)
+        # outputs = model(
+        #     input_ids=inputs,
+        #     attention_mask=masks,
+        # )
+        # loss = F.cross_entropy(outputs.logits.transpose(1,2), labels)
+        embeds, all_masks, _ = latent_reasoning_forward(model, inputs, masks)
+        print(labels.shape)
+        exit()
+        loss = latent_plus_answer_loss(model, embeds, all_masks, labels)
         loss.backward()
         if ((i + 1) % gradient_accumulation_steps == 0) or \
             (i + 1 == len(dataloader)):

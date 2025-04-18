@@ -1,5 +1,6 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch.nn.functional as F
 
 
 def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=30):
@@ -62,7 +63,52 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=3
     
     return all_embeddings, all_attention_mask, token_types
 
-def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=5, max_new_tokens=50):
+def latent_plus_answer_loss(model, embeddings, attention_mask, labels):
+    """
+    Compute loss for latent reasoning plus answer prediction.
+    
+    Args:
+        model: The language model
+        embeddings: Embeddings from latent_reasoning_forward (includes prompt + latent steps)
+        attention_mask: Attention mask for embeddings
+        labels: Target token IDs to predict
+        
+    Returns:
+        Loss value combining latent reasoning with answer prediction
+    """
+    device = next(model.parameters()).device
+    batch_size = embeddings.shape[0]
+    
+    # Run the model on the latent embeddings to get predictions
+    outputs = model(
+        inputs_embeds=embeddings,
+        attention_mask=attention_mask,
+        output_hidden_states=True
+    )
+    
+    # Get the final hidden states after latent reasoning
+    final_hidden_states = outputs.hidden_states[-1]
+    
+    # Use these hidden states to predict the target labels
+    # The logits will be used to compute loss against the target labels
+    logits = outputs.logits
+    
+    # Calculate the loss
+    # Shift the logits to match the labels
+    # We use the last token prediction to predict the first label token and so on
+    shift_logits = logits[:, -1:-1+labels.shape[1], :]
+    
+    # For cross entropy, we need [B, C, T] for logits and [B, T] for targets
+    # where B=batch size, C=vocab size, T=sequence length
+    loss = F.cross_entropy(
+        shift_logits.transpose(1, 2),  # [B, C, T]
+        labels,                        # [B, T]
+        ignore_index=-100              # Ignore padding
+    )
+    
+    return loss
+
+def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=30, max_new_tokens=50):
     """
     Generate text with latent reasoning steps before visible token generation.
     
