@@ -15,10 +15,10 @@ def format_gsm8k_example(example):
   # Format the prompt
   context = format_prompt(question)
   # Parse the answer to get the final number
-  completion = parse_answer(answer)
+  completion = format_answer(parse_answer(answer))
   return context, completion
 
-def get_gsm8k_dataloader(tokenizer, batch_size=4, block_size=512):
+def get_gsm8k_dataloader(tokenizer, batch_size=4, block_size=128):
   pad_token_id = tokenizer.pad_token_id
   def _collate_batch(batch):
     return collate_batch(batch, tokenizer, pad_token_id, block_size=block_size)

@@ -6,6 +6,9 @@ def parse_answer(answer):
   assert answer.split()[-2] == '####'
   return answer.split()[-1]
 
+def format_answer(answer):
+  return f'\n</think>\n{answer}'
+
 def format_prompt(question):
   prompt = 'Solve the following math problem step-by-step. Think briefly and provide a numeric answer.\n' \
            '{}\n<think>\n'
@@ -22,7 +25,7 @@ def pad_tokens(tokens, max_seq_length, padding_token):
       [padding_token for _ in range(max_seq_length - token_len)]
   return res_tokens
 
-def collate_batch(batch, tokenizer, pad_token_id, device='cuda', block_size=512):
+def collate_batch(batch, tokenizer, pad_token_id, device='cuda', block_size=128):
   # tokenize both context and completion respectively
   # (context and completion is delimited by "\n")
   context_list = list(zip(*batch))[0]

@@ -22,8 +22,6 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
         # )
         # loss = F.cross_entropy(outputs.logits.transpose(1,2), labels)
         embeds, all_masks, _ = latent_reasoning_forward(model, inputs, masks)
-        print(labels.shape)
-        exit()
         loss = latent_plus_answer_loss(model, embeds, all_masks, labels)
         loss.backward()
         if ((i + 1) % gradient_accumulation_steps == 0) or \
