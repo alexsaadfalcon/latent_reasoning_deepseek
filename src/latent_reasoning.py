@@ -72,7 +72,7 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=5
     
     return all_embeddings, all_attention_mask, token_types
 
-def latent_plus_answer_loss(model, embeddings, attention_mask, labels):
+def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mask):
     """
     Compute loss for latent reasoning plus answer prediction.
     
@@ -89,11 +89,17 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels):
     batch_size = embeddings.shape[0]
     
     # Run the model on the latent embeddings to get predictions
-    outputs = model(
-        inputs_embeds=embeddings,
-        attention_mask=attention_mask,
-        output_hidden_states=True
-    )
+    # outputs = model(
+    #     inputs_embeds=embeddings,
+    #     attention_mask=attention_mask,
+    #     output_hidden_states=True
+    # )
+    answer_embed = model.get_input_embeddings()(labels)
+    print(embeddings.shape, labels.shape)
+    print(answer_embed.shape)
+    combined_embeddings = torch.cat([embeddings, answer_embed], dim=1)
+    causal_mask = 
+    input()
     
     # Get the final hidden states after latent reasoning
     final_hidden_states = outputs.hidden_states[-1]

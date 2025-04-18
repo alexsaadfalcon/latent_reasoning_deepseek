@@ -18,17 +18,19 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
       with torch.set_grad_enabled(True):
         # Process the input through latent reasoning
         embeds, all_masks, _ = latent_reasoning_forward(model, question, question_mask)
-        print(question)
-        print(answer)
-        from transformers import AutoTokenizer
-        tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B")
-        print('input0', tokenizer.decode(question[0]))
-        # Filter out -100 padding tokens before decoding
-        filtered_labels = answer[0].clone()
-        filtered_labels = filtered_labels[filtered_labels != -100]
-        print('label0', tokenizer.decode(filtered_labels))
-        exit()
-        loss = latent_plus_answer_loss(model, embeds, all_masks, labels)
+        ### CHECK THAT THIS IS FORMATTED CORRECTLY
+        # print(question)
+        # print(answer)
+        # from transformers import AutoTokenizer
+        # tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B")
+        # print('input0', tokenizer.decode(question[0]))
+        # # Filter out -100 padding tokens before decoding
+        # filtered_labels = answer[0].clone()
+        # filtered_labels = filtered_labels[filtered_labels != -100]
+        # print('label0', tokenizer.decode(filtered_labels))
+        # exit()
+        print(question.shape, answer.shape)
+        loss = latent_plus_answer_loss(model, embeds, all_masks, answer, answer_mask)
         loss.backward()
         if ((i + 1) % gradient_accumulation_steps == 0) or \
             (i + 1 == len(dataloader)):
