@@ -21,7 +21,8 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    apply_lora(model)
+    lora_dim = 16
+    apply_lora(model, lora_dim=lora_dim)
     
     # Set up data
     print("Loading GSM8K dataset")

@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch.nn.functional as F
 
 
-def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=30):
+def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=5):
     """
     Generate text with latent reasoning steps before visible token generation.
     
@@ -60,6 +60,15 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=3
             token_types,
             torch.ones((1, 1), device=device)  # 1 = latent reasoning
         ], dim=1)
+        
+        # Check VRAM usage, grows quickly
+        # if torch.cuda.is_available():
+        #     allocated = torch.cuda.memory_allocated() / (1024 ** 3)  # Convert to GB
+        #     reserved = torch.cuda.memory_reserved() / (1024 ** 3)    # Convert to GB
+        #     print(f"VRAM usage - Step {step}: Allocated: {allocated:.2f} GB, Reserved: {reserved:.2f} GB")
+            
+        #     # Print shapes to debug memory growth
+        #     print(f"Shapes - embeddings: {all_embeddings.shape}, attention_mask: {all_attention_mask.shape}")
     
     return all_embeddings, all_attention_mask, token_types
 
@@ -108,7 +117,7 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels):
     
     return loss
 
-def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=30, max_new_tokens=50):
+def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=5, max_new_tokens=50):
     """
     Generate text with latent reasoning steps before visible token generation.
     

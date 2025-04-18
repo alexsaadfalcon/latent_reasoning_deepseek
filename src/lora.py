@@ -28,8 +28,7 @@ class LoRA_Linear(nn.Module):
     y = input @ self.lora_right @ self.lora_left
     return x + y
 
-def apply_lora(model):
-  lora_dim = 128
+def apply_lora(model, lora_dim=128):
   device = model.device
 
   # get target module name
