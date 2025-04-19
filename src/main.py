@@ -5,6 +5,7 @@ from gsm8k import get_gsm8k_latent_dataloader
 from lora import apply_lora
 from train import train_latent
 from latent_reasoning import generate_with_latent_reasoning
+from utils import format_prompt
 
 def main():
     # Set device
@@ -65,8 +66,8 @@ def main():
     # Test latent reasoning
     print("Testing latent reasoning")
     test_examples = [
-        "Solve the following math problem step-by-step. Think briefly and provide a numeric answer.\nIf John has 5 apples and Mary has 3 apples, how many apples do they have in total?",
-        "Solve the following math problem step-by-step. Think briefly and provide a numeric answer.\nA train travels at 60 mph. How far will it travel in 3.5 hours?"
+        format_prompt("If John has 5 apples and Mary has 3 apples, how many apples do they have in total?"),
+        format_prompt("A train travels at 60 mph. How far will it travel in 3.5 hours?"),
     ]
     
     for example in test_examples:
