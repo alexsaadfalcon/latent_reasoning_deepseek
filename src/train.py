@@ -48,7 +48,13 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
     print("")
 
   # save model
-  torch.save(model.state_dict(), "finetuned_latent.bin")
+  counter = 0
+  while True:
+    fname = f"finetuned_latent_{counter}.bin"
+    counter += 1
+    if not os.path.exists(fname):
+      torch.save(model.state_dict(), fname)
+      break
 
 
 if __name__ == '__main__':

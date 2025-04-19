@@ -26,7 +26,7 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    lora_dim = 16
+    lora_dim = 128
     apply_lora(model, lora_dim=lora_dim)
     
     # Set up data
