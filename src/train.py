@@ -30,6 +30,7 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
         # print('label0', tokenizer.decode(filtered_labels))
         # exit()
         print(question.shape, answer.shape)
+        print(question_mask[0], answer_mask[0])
         loss = latent_plus_answer_loss(model, embeds, all_masks, answer, answer_mask)
         loss.backward()
         if ((i + 1) % gradient_accumulation_steps == 0) or \

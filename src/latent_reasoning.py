@@ -72,6 +72,12 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=5
     
     return all_embeddings, all_attention_mask, token_types
 
+def construct_logit_mask(attention_mask, label_mask):
+    logit_mask = torch.zeros_like(label_mask)
+    logit_mask[:, 3:] = label_mask[:, :-3]
+    logit_mask = torch.cat([torch.zeros_like(attention_mask), logit_mask], dim=1)
+    return logit_mask
+
 def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mask):
     """
     Compute loss for latent reasoning plus answer prediction.
@@ -95,14 +101,12 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mas
     #     output_hidden_states=True
     # )
     answer_embed = model.get_input_embeddings()(labels)
-    print(embeddings.shape, labels.shape)
-    print(answer_embed.shape)
     combined_embeddings = torch.cat([embeddings, answer_embed], dim=1)
-    causal_mask = 
-    input()
-    
-    # Get the final hidden states after latent reasoning
-    final_hidden_states = outputs.hidden_states[-1]
+    combined_mask = torch.cat([attention_mask, label_mask], dim=1)
+    outputs = model(
+        inputs_embeds=combined_embeddings,
+        attention_mask=combined_mask,
+    )
     
     # Use these hidden states to predict the target labels
     # The logits will be used to compute loss against the target labels
@@ -111,7 +115,12 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mas
     # Calculate the loss
     # Shift the logits to match the labels
     # We use the last token prediction to predict the first label token and so on
-    shift_logits = logits[:, -1:-1+labels.shape[1], :]
+    shift_logits = logits[:, -labels.shape[1]:-1, :]
+    logit_mask = construct_logit_mask(attention_mask, label_mask)
+    print('logits', logits.shape, shift_logits.shape)
+    print(logit_mask.shape)
+    print(logit_mask[0, -10:])
+    input()
     
     # For cross entropy, we need [B, C, T] for logits and [B, T] for targets
     # where B=batch size, C=vocab size, T=sequence length
