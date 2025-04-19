@@ -86,6 +86,7 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mas
         embeddings: Embeddings from latent_reasoning_forward (includes prompt + latent steps)
         attention_mask: Attention mask for embeddings
         labels: Target token IDs to predict
+        label_mask: Mask for labels
         
     Returns:
         Loss value combining latent reasoning with answer prediction
@@ -116,13 +117,16 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mas
     # We use the last token prediction to predict the first label token and so on
     shift_logits = logits[:, -(labels.shape[1]+1):-1, :]
     logit_mask = construct_logit_mask(label_mask)
-    labels[logit_mask == 0] = -100
+    
+    # Create masked labels without modifying the original tensor
+    masked_labels = labels.clone()
+    masked_labels[logit_mask == 0] = -100
     
     # For cross entropy, we need [B, C, T] for logits and [B, T] for targets
     # where B=batch size, C=vocab size, T=sequence length
     loss = F.cross_entropy(
         shift_logits.transpose(1, 2),  # [B, C, T]
-        labels,                        # [B, T]
+        masked_labels,                 # [B, T]
         ignore_index=-100              # Ignore padding
     )
     
