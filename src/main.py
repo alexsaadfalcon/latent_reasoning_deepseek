@@ -28,7 +28,7 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    lora_dim = 128
+    lora_dim = 32
     apply_lora(model, lora_dim=lora_dim)
     
     # Set up data
@@ -37,7 +37,7 @@ def main():
     dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     # Set up optimizer and scheduler
-    learning_rate = 5e-5
+    learning_rate = 1e-3
     num_epochs = 2
     gradient_accumulation_steps = 16
     
