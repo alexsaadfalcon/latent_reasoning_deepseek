@@ -69,7 +69,7 @@ def collate_batch_latent(batch, tokenizer, pad_token_id, device='cuda', block_si
   questions = tokenizer(question_list, return_tensors='pt', padding=True)
   
   # Tokenize answers (these will be labels)
-  answers = tokenizer(answer_list, return_tensors='pt', padding=True)
+  answers = tokenizer(answer_list, return_tensors='pt', padding=True, add_special_tokens=False)
 
   return questions['input_ids'].to(device), questions['attention_mask'].to(device), \
          answers['input_ids'].to(device), answers['attention_mask'].to(device)

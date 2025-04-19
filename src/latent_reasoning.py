@@ -74,7 +74,7 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=5
 
 def construct_logit_mask(label_mask):
     logit_mask = torch.zeros_like(label_mask)
-    logit_mask[:, 4:] = label_mask[:, :-4]
+    logit_mask[:, 3:] = label_mask[:, :-3]
     return logit_mask
 
 def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mask):
@@ -117,6 +117,13 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mas
     # We use the last token prediction to predict the first label token and so on
     shift_logits = logits[:, -(labels.shape[1]+1):-1, :]
     logit_mask = construct_logit_mask(label_mask)
+    # from transformers import AutoTokenizer
+    # tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B")
+    # print(labels[0], tokenizer.decode(labels[0]))
+    # print(labels[1], tokenizer.decode(labels[1]))
+    # print(logit_mask[0])
+    # print(logit_mask[1])
+    # input()
     
     # Create masked labels without modifying the original tensor
     masked_labels = labels.clone()
