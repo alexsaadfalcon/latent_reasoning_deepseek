@@ -334,8 +334,8 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
         )
         
         # Phase 2: Add </think> token to mark end of reasoning
-        think_end_tokens = tokenizer.encode("</think>", add_special_tokens=False)
-        if len(think_end_tokens) > 0 and think_end_tokens[0] != tokenizer.unk_token_id:
+        think_end_tokens = tokenizer.encode("\n</think>\n", add_special_tokens=False)
+        if len(think_end_tokens) == 3 and think_end_tokens[0] != tokenizer.unk_token_id:
             think_end_token_id = torch.tensor([[think_end_tokens[0]]], device=device)
             think_end_embedding = model.get_input_embeddings()(think_end_token_id)
             
@@ -343,7 +343,7 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
             all_embeddings = torch.cat([all_embeddings, think_end_embedding], dim=1)
             all_attention_mask = torch.cat([
                 all_attention_mask,
-                torch.ones((1, 1), device=device)
+                torch.ones((1, 3), device=device)
             ], dim=1)
         else:
             raise NotImplementedError('think token not in vocabulary')
@@ -357,7 +357,6 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
             attention_mask=all_attention_mask
         )
         next_token_logits = outputs.logits[:, -1, :]
-        past_key_values = outputs.past_key_values
         
         # Start generating tokens
         for i in range(max_new_tokens):
@@ -369,14 +368,22 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
             if next_token_id.item() == tokenizer.eos_token_id:
                 break
             
+            # Convert token ID to embedding
+            next_token_embedding = model.get_input_embeddings()(next_token_id)
+            
+            # Concatenate to existing embeddings
+            all_embeddings = torch.cat([all_embeddings, next_token_embedding], dim=1)
+            all_attention_mask = torch.cat([
+                all_attention_mask,
+                torch.ones((1, 1), device=device)
+            ], dim=1)
+            
             # Get the next logits for the next iteration
             outputs = model(
-                input_ids=next_token_id,
-                use_cache=True,
-                past_key_values=past_key_values
+                inputs_embeds=all_embeddings,
+                attention_mask=all_attention_mask
             )
             next_token_logits = outputs.logits[:, -1, :]
-            past_key_values = outputs.past_key_values
     
     # Decode the visible tokens (prompt + generated tokens)
     visible_tokens = input_ids[0].tolist() + generated_ids
