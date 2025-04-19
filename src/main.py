@@ -5,7 +5,7 @@ from gsm8k import get_gsm8k_latent_dataloader
 from lora import apply_lora
 from train import train_latent
 from latent_reasoning import generate_with_latent_reasoning
-from utils import format_prompt
+from utils import format_prompt, format_answer
 
 def main():
     # Set device
@@ -20,7 +20,9 @@ def main():
     start_think_id = tokenizer.encode('<think>', add_special_tokens=False)
     stop_think_id = tokenizer.encode('</think>', add_special_tokens=False)
     newline_id = tokenizer.encode('\n', add_special_tokens=False)
+    answer_pad = len(tokenizer.encode(format_answer(''), add_special_tokens=False))
     print('start/stop think ids', start_think_id, stop_think_id, newline_id)
+    print('number of answer pad tokens', answer_pad)
     model = AutoModelForCausalLM.from_pretrained(model_name)
     model.to(device)
     
