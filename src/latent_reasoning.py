@@ -72,10 +72,9 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=5
     
     return all_embeddings, all_attention_mask, token_types
 
-def construct_logit_mask(attention_mask, label_mask):
+def construct_logit_mask(label_mask):
     logit_mask = torch.zeros_like(label_mask)
-    logit_mask[:, 3:] = label_mask[:, :-3]
-    logit_mask = torch.cat([torch.zeros_like(attention_mask), logit_mask], dim=1)
+    logit_mask[:, 4:] = label_mask[:, :-4]
     return logit_mask
 
 def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mask):
@@ -115,12 +114,9 @@ def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mas
     # Calculate the loss
     # Shift the logits to match the labels
     # We use the last token prediction to predict the first label token and so on
-    shift_logits = logits[:, -labels.shape[1]:-1, :]
-    logit_mask = construct_logit_mask(attention_mask, label_mask)
-    print('logits', logits.shape, shift_logits.shape)
-    print(logit_mask.shape)
-    print(logit_mask[0, -10:])
-    input()
+    shift_logits = logits[:, -(labels.shape[1]+1):-1, :]
+    logit_mask = construct_logit_mask(label_mask)
+    labels[logit_mask == 0] = -100
     
     # For cross entropy, we need [B, C, T] for logits and [B, T] for targets
     # where B=batch size, C=vocab size, T=sequence length
