@@ -335,6 +335,7 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
         
         # Phase 2: Add </think> token to mark end of reasoning
         think_end_tokens = tokenizer.encode("\n</think>\n", add_special_tokens=False)
+        print(f"</think> tokens: {think_end_tokens}, decoded: {tokenizer.decode(think_end_tokens)}")
         if len(think_end_tokens) == 3 and think_end_tokens[0] != tokenizer.unk_token_id:
             think_end_token_ids = torch.tensor([think_end_tokens], device=device)
             think_end_embeddings = model.get_input_embeddings()(think_end_token_ids)
@@ -385,19 +386,33 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
             )
             next_token_logits = outputs.logits[:, -1, :]
     
-    # Decode the visible tokens (prompt + generated tokens)
-    visible_tokens = input_ids[0].tolist() + generated_ids
-    visible_text = tokenizer.decode(visible_tokens, skip_special_tokens=True)
+    # Keep track of all token types for visibility
+    token_types = []
+    for i in range(len(input_ids[0])):
+        token_types.append(0)  # Prompt tokens
+    for i in range(reasoning_steps):
+        token_types.append(1)  # Latent reasoning tokens
+    for i in range(len(think_end_tokens)):
+        token_types.append(2)  # </think> tokens
+    for i in range(len(generated_ids)):
+        token_types.append(3)  # Generated tokens
     
-    # Format the result to indicate reasoning occurred
-    if visible_text.startswith(prompt):
-        response_text = visible_text[len(prompt):].strip()
-        result = f"{prompt} ***thinking*** {response_text}"
-    else:
-        # Fallback in case there's any issue with exact matching
-        result = f"{prompt} ***thinking*** {visible_text[len(prompt):].strip()}"
+    # Print token type debug info
+    token_counts = {
+        0: token_types.count(0),  # Prompt tokens
+        1: token_types.count(1),  # Latent reasoning tokens
+        2: token_types.count(2),  # </think> tokens
+        3: token_types.count(3)   # Generated tokens
+    }
+    print(f"Token counts: {token_counts}")
     
-    return result
+    # Decode the visible tokens (prompt + </think> + generated tokens)
+    visible_tokens = input_ids[0].tolist() + think_end_tokens + generated_ids
+    visible_text = tokenizer.decode(visible_tokens, skip_special_tokens=False)
+    print(f"Full decoded output: {visible_text}")
+    
+    # Format the result without any extra processing
+    return visible_text
 
 # Example usage
 def test_latent_reasoning():

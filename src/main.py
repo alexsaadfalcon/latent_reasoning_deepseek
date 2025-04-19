@@ -21,8 +21,10 @@ def main():
     stop_think_id = tokenizer.encode('</think>', add_special_tokens=False)
     newline_id = tokenizer.encode('\n', add_special_tokens=False)
     answer_pad = len(tokenizer.encode(format_answer(''), add_special_tokens=False))
+    eos_id = tokenizer.encode('<｜end▁of▁sentence｜>', add_special_tokens=False)
     print('start/stop think ids', start_think_id, stop_think_id, newline_id)
     print('number of answer pad tokens', answer_pad)
+    print('eos tokens', eos_id)
     model = AutoModelForCausalLM.from_pretrained(model_name)
     model.to(device)
     
@@ -54,7 +56,7 @@ def main():
     )
     
     load_model = None
-    load_model = 'finetuned_latent_0.bin'
+    # load_model = 'finetuned_latent_0.bin'
     if load_model is None:
         # Train the model
         print("Starting training")
@@ -77,8 +79,9 @@ def main():
     test_examples = [
         format_prompt("If John has 5 apples and Mary has 3 apples, how many apples do they have in total?"),
         format_prompt("A train travels at 60 mph. How far will it travel in 3.5 hours?"),
+        format_prompt("Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?")
     ]
-    
+
     for example in test_examples:
         result = generate_with_latent_reasoning_v2(
             model=model,
