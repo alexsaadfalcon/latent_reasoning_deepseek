@@ -301,6 +301,97 @@ def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=5, 
     
     return result
 
+def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=5, max_new_tokens=50):
+    """
+    Generate text with latent reasoning steps before visible token generation.
+    Uses the same methodology as in training (latent_reasoning_forward + token generation).
+    
+    Args:
+        model: The language model
+        tokenizer: The tokenizer for the model
+        prompt: Text prompt to generate from
+        reasoning_steps: Number of latent reasoning steps
+        max_new_tokens: Maximum number of visible tokens to generate
+        
+    Returns:
+        Generated text with reasoning masked
+    """
+    device = next(model.parameters()).device
+    
+    # Tokenize the prompt
+    inputs = tokenizer(prompt, return_tensors="pt").to(device)
+    input_ids = inputs.input_ids
+    attention_mask = inputs.attention_mask
+    
+    # Run in inference mode
+    with torch.no_grad():
+        # Phase 1: Get latent embeddings using latent_reasoning_forward
+        all_embeddings, all_attention_mask, token_types = latent_reasoning_forward(
+            model=model,
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            reasoning_steps=reasoning_steps
+        )
+        
+        # Phase 2: Add </think> token to mark end of reasoning
+        think_end_tokens = tokenizer.encode("</think>", add_special_tokens=False)
+        if len(think_end_tokens) > 0 and think_end_tokens[0] != tokenizer.unk_token_id:
+            think_end_token_id = torch.tensor([[think_end_tokens[0]]], device=device)
+            think_end_embedding = model.get_input_embeddings()(think_end_token_id)
+            
+            # Add the </think> token embedding
+            all_embeddings = torch.cat([all_embeddings, think_end_embedding], dim=1)
+            all_attention_mask = torch.cat([
+                all_attention_mask,
+                torch.ones((1, 1), device=device)
+            ], dim=1)
+        else:
+            raise NotImplementedError('think token not in vocabulary')
+        
+        # Phase 3: Generate tokens autoregressively
+        generated_ids = []
+        
+        # Get the starting logits from the latent embeddings
+        outputs = model(
+            inputs_embeds=all_embeddings,
+            attention_mask=all_attention_mask
+        )
+        next_token_logits = outputs.logits[:, -1, :]
+        past_key_values = outputs.past_key_values
+        
+        # Start generating tokens
+        for i in range(max_new_tokens):
+            # Get the next token
+            next_token_id = torch.argmax(next_token_logits, dim=-1, keepdim=True)
+            generated_ids.append(next_token_id.item())
+            
+            # Stop if we hit the EOS token
+            if next_token_id.item() == tokenizer.eos_token_id:
+                break
+            
+            # Get the next logits for the next iteration
+            outputs = model(
+                input_ids=next_token_id,
+                use_cache=True,
+                past_key_values=past_key_values
+            )
+            next_token_logits = outputs.logits[:, -1, :]
+            past_key_values = outputs.past_key_values
+    
+    # Decode the visible tokens (prompt + generated tokens)
+    visible_tokens = input_ids[0].tolist() + generated_ids
+    visible_text = tokenizer.decode(visible_tokens, skip_special_tokens=True)
+    
+    # Format the result to indicate reasoning occurred
+    if visible_text.startswith(prompt):
+        response_text = visible_text[len(prompt):].strip()
+        result = f"{prompt} ***thinking*** {response_text}"
+    else:
+        # Fallback in case there's any issue with exact matching
+        result = f"{prompt} ***thinking*** {visible_text[len(prompt):].strip()}"
+    
+    return result
+
 # Example usage
 def test_latent_reasoning():
     model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"

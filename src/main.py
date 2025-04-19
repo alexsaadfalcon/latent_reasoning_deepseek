@@ -4,7 +4,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, get_linear_schedul
 from gsm8k import get_gsm8k_latent_dataloader
 from lora import apply_lora
 from train import train_latent
-from latent_reasoning import generate_with_latent_reasoning
+from latent_reasoning import generate_with_latent_reasoning, generate_with_latent_reasoning_v2
 from utils import format_prompt, format_answer
 
 def main():
@@ -53,17 +53,24 @@ def main():
         num_training_steps=num_update_steps
     )
     
-    # Train the model
-    print("Starting training")
-    train_latent(
-        model=model,
-        optimizer=optimizer,
-        scheduler=scheduler,
-        dataloader=dataloader,
-        batch_size=batch_size,
-        gradient_accumulation_steps=gradient_accumulation_steps,
-        num_epochs=num_epochs
-    )
+    load_model = None
+    load_model = 'finetuned_latent_0.bin'
+    if load_model is None:
+        # Train the model
+        print("Starting training")
+        train_latent(
+            model=model,
+            optimizer=optimizer,
+            scheduler=scheduler,
+            dataloader=dataloader,
+            batch_size=batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            num_epochs=num_epochs
+        )
+    else:
+        model.load_state_dict(torch.load(load_model))
+    
+    model.eval()
     
     # Test latent reasoning
     print("Testing latent reasoning")
@@ -73,7 +80,7 @@ def main():
     ]
     
     for example in test_examples:
-        result = generate_with_latent_reasoning(
+        result = generate_with_latent_reasoning_v2(
             model=model,
             tokenizer=tokenizer,
             prompt=example,
