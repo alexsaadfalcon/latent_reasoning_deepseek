@@ -336,11 +336,11 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
         # Phase 2: Add </think> token to mark end of reasoning
         think_end_tokens = tokenizer.encode("\n</think>\n", add_special_tokens=False)
         if len(think_end_tokens) == 3 and think_end_tokens[0] != tokenizer.unk_token_id:
-            think_end_token_id = torch.tensor([[think_end_tokens[0]]], device=device)
-            think_end_embedding = model.get_input_embeddings()(think_end_token_id)
+            think_end_token_ids = torch.tensor([think_end_tokens], device=device)
+            think_end_embeddings = model.get_input_embeddings()(think_end_token_ids)
             
-            # Add the </think> token embedding
-            all_embeddings = torch.cat([all_embeddings, think_end_embedding], dim=1)
+            # Add the </think> token embeddings
+            all_embeddings = torch.cat([all_embeddings, think_end_embeddings], dim=1)
             all_attention_mask = torch.cat([
                 all_attention_mask,
                 torch.ones((1, 3), device=device)
