@@ -73,8 +73,9 @@ def latent_reasoning_forward(model, input_ids, attention_mask, reasoning_steps=5
     return all_embeddings, all_attention_mask, token_types
 
 def construct_logit_mask(label_mask):
+    # 9 is the shift from format_answer excluding the end of sentence token
     logit_mask = torch.zeros_like(label_mask)
-    logit_mask[:, 3:] = label_mask[:, :-3]
+    logit_mask[:, 9:] = label_mask[:, :-9]
     return logit_mask
 
 def latent_plus_answer_loss(model, embeddings, attention_mask, labels, label_mask):

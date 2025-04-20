@@ -6,7 +6,7 @@ def parse_answer(answer):
   return answer.split()[-1]
 
 def format_answer(answer):
-  return f'\n</think>\n{answer}<｜end▁of▁sentence｜>'
+  return f'\n</think>\nThe correct answer is: {answer}<｜end▁of▁sentence｜>'
 
 def format_prompt(question):
   prompt = 'Solve the following math problem step-by-step. Think briefly and provide a numeric answer.\n' \
