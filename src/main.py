@@ -87,7 +87,7 @@ def main():
             model=model,
             tokenizer=tokenizer,
             prompt=example,
-            reasoning_steps=5,
+            reasoning_steps=30,
             max_new_tokens=100
         )
         print(f"\nInput: {example}\nOutput: {result}\n")
