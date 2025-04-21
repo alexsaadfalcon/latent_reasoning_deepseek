@@ -337,9 +337,9 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
         )
         
         # Phase 2: Add </think> token to mark end of reasoning
-        think_end_tokens = tokenizer.encode(format_answer(), add_special_tokens=False)[:-1]
+        think_end_tokens = tokenizer.encode(format_answer(''), add_special_tokens=False)[:-1]
         print(f"</think> tokens: {think_end_tokens}, decoded: {tokenizer.decode(think_end_tokens)}")
-        if len(think_end_tokens) == 3 and think_end_tokens[0] != tokenizer.unk_token_id:
+        if len(think_end_tokens) == 9 and think_end_tokens[0] != tokenizer.unk_token_id:
             think_end_token_ids = torch.tensor([think_end_tokens], device=device)
             think_end_embeddings = model.get_input_embeddings()(think_end_token_ids)
             
