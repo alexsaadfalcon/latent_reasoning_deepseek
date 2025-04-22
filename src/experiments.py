@@ -4,41 +4,43 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, get_linear_schedul
 from gsm8k import get_gsm8k_latent_dataloader
 from lora import apply_lora
 from train import train_latent
-from latent_reasoning import generate_with_latent_reasoning, generate_with_latent_reasoning_v2
+from latent_reasoning import generate_with_latent_reasoning_batch
 from utils import format_prompt, format_answer
 from tqdm import tqdm
 
-def evaluate_accuracy(model, tokenizer, dataloader):
+def evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=30):
     model.eval()
     total_correct = 0
     total_samples = 0
     
     with torch.no_grad():
-        for question, question_mask, answer, answer_mask in dataloader:
-            # Generate responses using latent reasoning
+        for question, question_mask, answer, answer_mask in tqdm(dataloader):
+            # Move data to the device where the model is
+            device = next(model.parameters()).device
+            question = question.to(device)
+            question_mask = question_mask.to(device)
+            answer = answer.to(device)
+            answer_mask = answer_mask.to(device)
             batch_size = question.size(0)
-            predictions = []
             
-            for i in tqdm(range(batch_size)):
-                # Get the input prompt
-                prompt = tokenizer.decode(question[i], skip_special_tokens=True)
-                
-                # Generate prediction with latent reasoning
-                output = generate_with_latent_reasoning_v2(
-                    model=model,
-                    tokenizer=tokenizer,
-                    prompt=prompt,
-                    reasoning_steps=30,
-                    max_new_tokens=100
-                )
-                # trim EOS token
-                eos = '<｜end▁of▁sentence｜>'
-                output = output.replace(eos, '')
-                
-                # Extract the answer from output (assuming format_answer structure)
-                # The answer is expected to be after format_answer prefix
-                predicted_answer = output.split()[-1].strip()
-                predictions.append(predicted_answer)
+            # Generate predictions in batch mode
+            output_tokens = generate_with_latent_reasoning_batch(
+                model=model,
+                tokenizer=tokenizer,
+                input_ids=question,
+                attention_mask=question_mask,
+                reasoning_steps=reasoning_steps,
+                max_new_tokens=100
+            )
+            
+            # Process outputs and extract answers
+            predictions = []
+            eos_token_id = tokenizer.eos_token_id
+
+            a_start = question.shape[1] + 9
+            outputs = [tokenizer.decode(output_tokens[i, a_start:-1]) for i in range(batch_size)]
+            eos_string = '<｜end▁of▁sentence｜>'
+            predictions = [o.replace(eos_string, '').strip() for o in outputs]
             
             # Compare with ground truth answers
             for i in range(batch_size):
@@ -46,15 +48,15 @@ def evaluate_accuracy(model, tokenizer, dataloader):
                 filtered_answer = answer[i].clone()
                 filtered_answer = filtered_answer[filtered_answer != -100]
                 true_answer = tokenizer.decode(filtered_answer, skip_special_tokens=True)
-                true_answer = true_answer.split()[-1]
+                true_answer = true_answer.split()[-1].strip()
                 
-                # Check if prediction matches ground truth (basic string comparison)
-                # Can be expanded to more sophisticated answer matching if needed
-                print('pred', predictions[i])
-                print('correct', true_answer)
-                if predictions[i] in true_answer or true_answer in predictions[i]:
+                # Check if prediction matches ground truth
+                print('pred:', predictions[i])
+                print('correct:', true_answer)
+                if true_answer in predictions[i]:
                     total_correct += 1
             
+            print(total_correct, batch_size)
             input()
             total_samples += batch_size
             
@@ -93,7 +95,7 @@ def main():
     
     # Set up data
     print("Loading GSM8K dataset")
-    batch_size = 64
+    batch_size = 32
     dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     load_model = None
