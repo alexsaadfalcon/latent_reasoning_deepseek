@@ -99,36 +99,28 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
     embedding_layer = model.get_input_embeddings()
     prompt_embeddings = embedding_layer(input_ids)
     
+    # Initialize our tracking variables
+    all_embeddings = prompt_embeddings
+    all_attention_mask = attention_mask
+    
     # Keep track of which positions are latent reasoning steps
     # 0 = prompt token, 1 = latent reasoning, 2 = generated token
     token_types = torch.zeros((1, prompt_length), device=device)  # Start with all prompt tokens
     
-    # Start with prompt embeddings, which maintain gradients
-    current_embeddings = prompt_embeddings
-    current_attention_mask = attention_mask
-    
-    # Store accumulated embeddings and masks (without gradient history)
-    all_embeddings = prompt_embeddings.detach().clone()
-    all_attention_mask = attention_mask.clone()
-    
-    # For the first reasoning step
-    last_hidden_states = []
-    
     # Phase 1: Latent reasoning steps
     for step in range(reasoning_steps):
-        # Forward pass with current embeddings (only has gradients for the immediate previous step)
+        # Forward pass with current embeddings
         outputs = model(
-            inputs_embeds=current_embeddings,
-            attention_mask=current_attention_mask,
+            inputs_embeds=all_embeddings,
+            attention_mask=all_attention_mask,
             output_hidden_states=True
         )
         
-        # Get the last hidden state (has gradients)
+        # Get the last hidden state
         last_hidden_state = outputs.hidden_states[-1][:, -1:, :]
-        last_hidden_states.append(last_hidden_state)
         
-        # Append the hidden state to our accumulated embeddings (without gradient history)
-        all_embeddings = torch.cat([all_embeddings, last_hidden_state.detach().clone()], dim=1)
+        # Append the hidden state to our embeddings
+        all_embeddings = torch.cat([all_embeddings, last_hidden_state], dim=1)
         
         # Update attention mask
         all_attention_mask = torch.cat([
@@ -142,19 +134,6 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
             torch.ones((1, 1), device=device)  # 1 = latent reasoning
         ], dim=1)
         
-        # For the next step, we use a fresh start from the prompt but with the latest hidden state
-        # This breaks the long gradient chain while still allowing step-by-step learning
-        if step < reasoning_steps - 1:
-            current_embeddings = torch.cat([
-                prompt_embeddings,
-                last_hidden_state,  # Keep gradients for just this last step
-            ], dim=1)
-            
-            current_attention_mask = torch.cat([
-                attention_mask,
-                torch.ones((B, 1), device=device)
-            ], dim=1)
-        
         # Check VRAM usage
         if torch.cuda.is_available():
             allocated = torch.cuda.memory_allocated() / (1024 ** 3)  # Convert to GB
@@ -164,19 +143,7 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
             # Print shapes to debug memory growth
             print(f"Shapes - embeddings: {all_embeddings.shape}, attention_mask: {all_attention_mask.shape}")
     
-    # For the final output, we need to combine everything with the last hidden state (with gradients)
-    # We use the original prompt + all reasoning steps (which have been detached)
-    final_embeddings = torch.cat([
-        prompt_embeddings,  # Original prompt with gradients
-        *[state for state in last_hidden_states]  # All reasoning steps with their respective gradients
-    ], dim=1)
-    
-    final_attention_mask = torch.cat([
-        attention_mask,
-        torch.ones((B, reasoning_steps), device=device)
-    ], dim=1)
-    
-    return final_embeddings, final_attention_mask, token_types
+    return all_embeddings, all_attention_mask, token_types
 
 def construct_logit_mask(label_mask):
     # 9 is the shift from format_answer excluding the end of sentence token
