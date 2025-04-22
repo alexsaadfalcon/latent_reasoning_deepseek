@@ -138,13 +138,13 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
         ], dim=1)
         
         # Check VRAM usage
-        if torch.cuda.is_available():
-            allocated = torch.cuda.memory_allocated() / (1024 ** 3)  # Convert to GB
-            reserved = torch.cuda.memory_reserved() / (1024 ** 3)    # Convert to GB
-            print(f"VRAM usage - Step {step}: Allocated: {allocated:.2f} GB, Reserved: {reserved:.2f} GB")
+        # if torch.cuda.is_available():
+        #     allocated = torch.cuda.memory_allocated() / (1024 ** 3)  # Convert to GB
+        #     reserved = torch.cuda.memory_reserved() / (1024 ** 3)    # Convert to GB
+        #     print(f"VRAM usage - Step {step}: Allocated: {allocated:.2f} GB, Reserved: {reserved:.2f} GB")
             
-            # Print shapes to debug memory growth
-            print(f"Shapes - embeddings: {all_embeddings.shape}, attention_mask: {all_attention_mask.shape}")
+        #     # Print shapes to debug memory growth
+        #     print(f"Shapes - embeddings: {all_embeddings.shape}, attention_mask: {all_attention_mask.shape}")
     
     return all_embeddings, all_attention_mask, token_types
 
