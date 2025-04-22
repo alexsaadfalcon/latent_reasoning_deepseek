@@ -38,7 +38,7 @@ def evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=30):
             eos_token_id = tokenizer.eos_token_id
 
             a_start = question.shape[1] + 9
-            outputs = [tokenizer.decode(output_tokens[i, a_start:-1]) for i in range(batch_size)]
+            outputs = [tokenizer.decode(output_tokens[i, a_start:-1], skip_special_tokens=True) for i in range(batch_size)]
             eos_string = '<｜end▁of▁sentence｜>'
             predictions = [o.replace(eos_string, '').strip() for o in outputs]
             
@@ -51,13 +51,9 @@ def evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=30):
                 true_answer = true_answer.split()[-1].strip()
                 
                 # Check if prediction matches ground truth
-                print('pred:', predictions[i])
-                print('correct:', true_answer)
                 if true_answer in predictions[i]:
                     total_correct += 1
             
-            print(total_correct, batch_size)
-            input()
             total_samples += batch_size
             
             # Print intermediate results
@@ -106,6 +102,10 @@ def main():
     # Run accuracy evaluation
     print("Evaluating model accuracy on GSM8K dataset")
     accuracy = evaluate_accuracy(model, tokenizer, dataloader)
+    print(f"Model accuracy: {accuracy:.4f}")
+
+    print("Evaluating model accuracy on GSM8K dataset with 100 reasoning steps")
+    accuracy = evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=100)
     print(f"Model accuracy: {accuracy:.4f}")
 
 if __name__ == "__main__":
