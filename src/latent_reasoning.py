@@ -108,7 +108,10 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
     token_types = torch.zeros((1, prompt_length), device=device)  # Start with all prompt tokens
     
     # Phase 1: Latent reasoning steps
+    torch.set_grad_enabled(False)
     for step in range(reasoning_steps):
+        if step == reasoning_steps - 1:
+            torch.set_grad_enabled(True)
         # Forward pass with current embeddings
         outputs = model(
             inputs_embeds=all_embeddings,
