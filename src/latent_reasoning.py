@@ -230,6 +230,7 @@ def generate_with_latent_reasoning(model, tokenizer, prompt, reasoning_steps=5, 
     Returns:
         Generated text with reasoning steps masked
     """
+    raise NotImplementedError()
     device = next(model.parameters()).device
     
     # Tokenize the prompt
@@ -412,7 +413,7 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
         
         # Phase 2: Add </think> token to mark end of reasoning
         think_end_tokens = tokenizer.encode(format_answer(''), add_special_tokens=False)[:-1]
-        print(f"</think> tokens: {think_end_tokens}, decoded: {tokenizer.decode(think_end_tokens)}")
+        # print(f"</think> tokens: {think_end_tokens}, decoded: {tokenizer.decode(think_end_tokens)}")
         if len(think_end_tokens) == 9 and think_end_tokens[0] != tokenizer.unk_token_id:
             think_end_token_ids = torch.tensor([think_end_tokens], device=device)
             think_end_embeddings = model.get_input_embeddings()(think_end_token_ids)
@@ -481,12 +482,12 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
         2: token_types.count(2),  # </think> tokens
         3: token_types.count(3)   # Generated tokens
     }
-    print(f"Token counts: {token_counts}")
+    # print(f"Token counts: {token_counts}")
     
     # Decode the visible tokens (prompt + </think> + generated tokens)
     visible_tokens = input_ids[0].tolist() + think_end_tokens + generated_ids
     visible_text = tokenizer.decode(visible_tokens, skip_special_tokens=False)
-    print(f"Full decoded output: {visible_text}")
+    # print(f"Full decoded output: {visible_text}")
     
     # Format the result without any extra processing
     return visible_text
