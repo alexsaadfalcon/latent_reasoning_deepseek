@@ -1,4 +1,10 @@
 import torch
+import json
+
+def load_json(fname):
+  with open(fname, 'r', encoding='utf-8') as file:
+    data = json.load(file)
+  return data
 
 def parse_answer(answer):
   # assert len(answer.split()) == 2, answer.split()

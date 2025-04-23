@@ -6,7 +6,7 @@ from torch.nn import functional as F
 from latent_reasoning import latent_reasoning_forward, latent_plus_answer_loss, latent_reasoning_forward_detach
 
 def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
-                 gradient_accumulation_steps=16, num_epochs=2):
+                 gradient_accumulation_steps=16, num_epochs=2, prefix=None):
   if os.path.exists("loss.txt"):
     os.remove("loss.txt")
 
@@ -51,7 +51,10 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
   # save model
   counter = 0
   while True:
-    fname = f"finetuned_latent_{counter}.bin"
+    if prefix:
+      fname = f"finetuned_latent_{prefix}_{counter}.bin"
+    else:
+      fname = f"finetuned_latent_{counter}.bin"
     counter += 1
     if not os.path.exists(fname):
       torch.save(model.state_dict(), fname)
