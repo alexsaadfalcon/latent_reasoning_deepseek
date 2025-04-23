@@ -586,6 +586,119 @@ def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_
     
     return full_tokens
 
+def latent_reasoning_attention(model, tokenizer, input_ids, attention_mask, reasoning_steps=5, max_new_tokens=50):
+    """
+    Plot the last attention step in latent reasoning
+    
+    Args:
+        model: The language model
+        tokenizer: The tokenizer for the model
+        input_ids: Tensor of input token IDs [batch_size, seq_len]
+        attention_mask: Tensor of attention mask [batch_size, seq_len]
+        reasoning_steps: Number of latent reasoning steps
+        max_new_tokens: Maximum number of visible tokens to generate
+        
+    Returns:
+        Tensor of generated token IDs [batch_size, seq_len]
+    """
+    device = next(model.parameters()).device
+    batch_size = input_ids.shape[0]
+    
+    # Run in inference mode
+    with torch.no_grad():
+        # Phase 1: Get latent embeddings using latent_reasoning_forward
+        all_embeddings, all_attention_mask, token_types = latent_reasoning_forward(
+            model=model,
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            reasoning_steps=reasoning_steps
+        )
+        
+        # Phase 2: Add answer format tokens to mark end of reasoning
+        answer_tokens = tokenizer.encode(format_answer(''), add_special_tokens=False)[:-1]
+        if len(answer_tokens) == 9 and answer_tokens[0] != tokenizer.unk_token_id:
+            answer_token_ids = torch.tensor([answer_tokens], device=device).repeat(batch_size, 1)
+            answer_embeddings = model.get_input_embeddings()(answer_token_ids)
+            
+            # Add the answer format token embeddings
+            all_embeddings = torch.cat([all_embeddings, answer_embeddings], dim=1)
+            all_attention_mask = torch.cat([
+                all_attention_mask,
+                torch.ones((batch_size, len(answer_tokens)), device=device)
+            ], dim=1)
+        else:
+            raise NotImplementedError('answer token format not in vocabulary')
+        
+        # Phase 3: Generate tokens autoregressively
+        generated_ids = torch.zeros((batch_size, max_new_tokens), dtype=torch.long, device=device)
+        
+        # Get the starting logits from the latent embeddings
+        outputs = model(
+            inputs_embeds=all_embeddings,
+            attention_mask=all_attention_mask
+        )
+        next_token_logits = outputs.logits[:, -1, :]
+        
+        # Track which samples have completed generation
+        eos_token_id = tokenizer.eos_token_id
+        finished = torch.zeros(batch_size, dtype=torch.bool, device=device)
+        
+        # Start generating tokens
+        for i in range(max_new_tokens):
+            # Get the next token
+            next_token_id = torch.argmax(next_token_logits, dim=-1)
+            generated_ids[:, i] = next_token_id
+            
+            # Mark finished samples
+            finished = finished | (next_token_id == eos_token_id)
+            if torch.all(finished):
+                break
+            
+            # Convert token IDs to embeddings
+            next_token_embedding = model.get_input_embeddings()(next_token_id.unsqueeze(1))
+            
+            # Concatenate to existing embeddings
+            all_embeddings = torch.cat([all_embeddings, next_token_embedding], dim=1)
+            all_attention_mask = torch.cat([
+                all_attention_mask,
+                torch.ones((batch_size, 1), device=device)
+            ], dim=1)
+            
+            # Get the next logits for the next iteration
+            outputs = model(
+                inputs_embeds=all_embeddings,
+                output_attentions=True,
+                attention_mask=all_attention_mask
+            )
+            next_token_logits = outputs.logits[:, -1, :]
+            
+        # Visualize attention matrix (2x2 plot)
+        import matplotlib.pyplot as plt
+        
+        # Get the last layer's attention
+        last_layer_attention = outputs.attentions[-1]  # Shape: [batch_size, num_heads, seq_len, seq_len]
+        
+        # Plot attention for the first sample in the batch
+        fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+        fig.suptitle(f'Attention Heads Visualization {input_ids.shape[1]} Question Tokens')
+        
+        # Plot 4 attention heads in a 2x2 grid
+        for row in range(2):
+            for col in range(2):
+                head_idx = row * 2 + col
+                ax = axs[row, col]
+                attention_matrix = last_layer_attention[0, head_idx].detach().log10().cpu().numpy()
+                im = ax.imshow(attention_matrix, cmap='viridis')
+                ax.set_title(f'Head {head_idx}')
+                ax.set_xlabel('Key tokens')
+                ax.set_ylabel('Query tokens')
+        
+        plt.colorbar(im, ax=axs.ravel().tolist())
+        plt.tight_layout()
+        plt.savefig(f'attention_matrix_step_{i}.png')
+        # plt.close()
+        plt.show()
+
 # Example usage
 def test_latent_reasoning():
     model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
