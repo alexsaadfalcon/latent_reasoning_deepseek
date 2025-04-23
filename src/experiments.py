@@ -91,8 +91,8 @@ def main():
     
     # Set up data
     print("Loading GSM8K dataset")
-    batch_size = 8
-    dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
+    batch_size = 2
+    dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128, test=True)
     
     load_model = None
     load_model = 'finetuned_latent_3.bin'
