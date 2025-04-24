@@ -14,6 +14,10 @@ def get_convex(test=False):
     qa = dict(question=entry['text'], answer=entry['answer'])
     dataset_.append(qa)
   dataset = dataset_
+  if not test:
+    dataset = dataset[:21]
+  else:
+    dataset = dataset[21:]
   # print(dataset[0])
   return dataset
 

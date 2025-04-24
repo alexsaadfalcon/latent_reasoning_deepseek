@@ -1,7 +1,7 @@
 import os
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, get_linear_schedule_with_warmup
-from textbook_data import get_convex_dataloader
+from textbook_data import get_convex_latent_dataloader
 from lora import apply_lora
 from train import train_latent
 from latent_reasoning import generate_with_latent_reasoning, generate_with_latent_reasoning_v2
@@ -31,17 +31,17 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    lora_dim = 32
+    lora_dim = 8
     apply_lora(model, lora_dim=lora_dim)
     
     # Set up data
     print("Loading GSM8K dataset")
     batch_size = 4
-    dataloader = get_convex_dataloader(tokenizer, batch_size=batch_size, block_size=128)
+    dataloader = get_convex_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     # Set up optimizer and scheduler
     learning_rate = 1e-3
-    num_epochs = 2
+    num_epochs = 200
     gradient_accumulation_steps = 16
     
     optimizer = torch.optim.AdamW(
