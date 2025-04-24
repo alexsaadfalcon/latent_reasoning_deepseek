@@ -6,6 +6,7 @@ from lora import apply_lora
 from train import train_latent
 from latent_reasoning import generate_with_latent_reasoning, generate_with_latent_reasoning_v2
 from utils import format_prompt, format_answer
+from experiments import get_model_predictions
 
 def main():
     # Set device
@@ -57,7 +58,7 @@ def main():
     )
     
     load_model = None
-    # load_model = 'finetuned_latent_0.bin'
+    load_model = 'finetuned_latent_convex_30_0.bin'
     if load_model is None:
         # Train the model
         print("Starting training")
@@ -78,21 +79,9 @@ def main():
     
     # Test latent reasoning
     print("Testing latent reasoning")
-    test_examples = [
-        format_prompt("If John has 5 apples and Mary has 3 apples, how many apples do they have in total?"),
-        format_prompt("A train travels at 60 mph. How far will it travel in 3.5 hours?"),
-        format_prompt("Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?")
-    ]
+    preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps)
+    print(preds)
 
-    for example in test_examples:
-        result = generate_with_latent_reasoning_v2(
-            model=model,
-            tokenizer=tokenizer,
-            prompt=example,
-            reasoning_steps=reasoning_steps,
-            max_new_tokens=100
-        )
-        print(f"\nInput: {example}\nOutput: {result}\n")
 
 if __name__ == "__main__":
     main()

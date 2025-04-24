@@ -8,6 +8,44 @@ from latent_reasoning import generate_with_latent_reasoning_batch
 from utils import format_prompt, format_answer
 from tqdm import tqdm
 
+
+def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30):
+    model.eval()
+    all_preds = []
+    
+    with torch.no_grad():
+        for question, question_mask, answer, answer_mask in tqdm(dataloader):
+            # Move data to the device where the model is
+            device = next(model.parameters()).device
+            question = question.to(device)
+            question_mask = question_mask.to(device)
+            answer = answer.to(device)
+            answer_mask = answer_mask.to(device)
+            batch_size = question.size(0)
+            
+            # Generate predictions in batch mode
+            output_tokens = generate_with_latent_reasoning_batch(
+                model=model,
+                tokenizer=tokenizer,
+                input_ids=question,
+                attention_mask=question_mask,
+                reasoning_steps=reasoning_steps,
+                max_new_tokens=100
+            )
+            
+            # Process outputs and extract answers
+            predictions = []
+            eos_token_id = tokenizer.eos_token_id
+
+            a_start = question.shape[1] + 9
+            outputs = [tokenizer.decode(output_tokens[i, a_start:-1], skip_special_tokens=True) for i in range(batch_size)]
+            eos_string = '<｜end▁of▁sentence｜>'
+            predictions = [o.replace(eos_string, '').strip() for o in outputs]
+            all_preds.extend(predictions)
+    
+    return all_preds
+
+
 def evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=30):
     model.eval()
     total_correct = 0
