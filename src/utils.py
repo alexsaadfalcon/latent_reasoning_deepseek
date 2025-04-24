@@ -19,6 +19,11 @@ def format_prompt(question):
            '{}\n<think>\n'
   return prompt.format(question)
 
+def format_prompt_convex(question):
+  prompt = 'Solve the following theoretical math problem step-by-step. Think briefly and provide a simple answer in the form of a statement or equation.\n' \
+           '{}\n<think>\n'
+  return prompt.format(question)
+
 def fill_ignore_label(l, c):
   l[:len(c) - 1] = [-100] * (len(c) - 1)
   return l

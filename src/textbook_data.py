@@ -25,7 +25,7 @@ def format_convex_example(example):
   question = example['question']
   answer = example['answer']
   # Format the prompt
-  context = format_prompt(question)
+  context = format_prompt_convex(question)
   # Parse the answer to get the final number
   completion = format_answer(answer)
   return context, completion

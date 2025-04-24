@@ -38,7 +38,7 @@ def main():
     # Set up data
     print("Loading GSM8K dataset")
     batch_size = 4
-    dataloader = get_convex_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
+    dataloader = get_convex_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
     
     # Set up optimizer and scheduler
     learning_rate = 1e-3
@@ -58,7 +58,7 @@ def main():
     )
     
     load_model = None
-    load_model = 'finetuned_latent_convex_30_0.bin'
+    # load_model = 'finetuned_latent_convex_30_0.bin'
     if load_model is None:
         # Train the model
         print("Starting training")
