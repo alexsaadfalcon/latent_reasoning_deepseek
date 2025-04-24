@@ -148,6 +148,100 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
     
     return all_embeddings, all_attention_mask, token_types
 
+def latent_reasoning_forward_one_step_gradients(model, input_ids, attention_mask, reasoning_steps=15):
+    """
+    Generate text with latent reasoning steps where gradients flow back one step at a time.
+    Each step only receives gradients from the immediate next step.
+    
+    Args:
+        model: The language model
+        input_ids: the tokenized prompt
+        attention_mask: attention mask for the input
+        reasoning_steps: Number of latent reasoning steps
+        
+    Returns:
+        Generated text with one-step gradient flow
+    """
+    device = next(model.parameters()).device
+    
+    # Tokenize the prompt
+    B = input_ids.shape[0]
+    prompt_length = input_ids.shape[1]
+    
+    # Get initial embeddings
+    embedding_layer = model.get_input_embeddings()
+    prompt_embeddings = embedding_layer(input_ids)
+    
+    # Initialize our tracking variables
+    current_embeddings = prompt_embeddings
+    current_attention_mask = attention_mask
+    
+    # Keep track of which positions are latent reasoning steps
+    token_types = torch.zeros((1, prompt_length), device=device)  # Start with all prompt tokens
+    
+    # Output containers
+    all_embeddings = current_embeddings.clone()
+    all_attention_mask = current_attention_mask.clone()
+    
+    # Phase 1: Latent reasoning steps with one-step gradient flow
+    for step in range(reasoning_steps):
+        # Get current context length
+        context_length = current_embeddings.shape[1]
+        
+        # Forward pass with current embeddings
+        outputs = model(
+            inputs_embeds=current_embeddings,
+            attention_mask=current_attention_mask,
+            output_hidden_states=True
+        )
+        
+        # Get the last hidden state
+        last_hidden_state = outputs.hidden_states[-1][:, -1:, :]
+        
+        # Detach all previous embeddings except the most recent one
+        # This creates a new computational graph with only one step of history
+        if step > 0:
+            current_embeddings = torch.cat([
+                current_embeddings[:, :-1, :].detach(),  # Detach all but last token
+                current_embeddings[:, -1:, :],           # Keep gradients for last token
+                last_hidden_state                        # Add new latent state
+            ], dim=1)
+        else:
+            # For first step, keep prompt embeddings connected
+            current_embeddings = torch.cat([
+                current_embeddings,
+                last_hidden_state
+            ], dim=1)
+        
+        # Update attention mask
+        current_attention_mask = torch.cat([
+            current_attention_mask,
+            torch.ones((B, 1), device=device)
+        ], dim=1)
+        
+        # Store the result for return
+        if step == 0:
+            all_embeddings = current_embeddings.clone()
+            all_attention_mask = current_attention_mask.clone()
+        else:
+            # Only append the new token to avoid memory duplication
+            all_embeddings = torch.cat([
+                all_embeddings,
+                last_hidden_state
+            ], dim=1)
+            all_attention_mask = torch.cat([
+                all_attention_mask,
+                torch.ones((B, 1), device=device)
+            ], dim=1)
+        
+        # Mark this position as a latent reasoning step
+        token_types = torch.cat([
+            token_types,
+            torch.ones((1, 1), device=device)  # 1 = latent reasoning
+        ], dim=1)
+    
+    return all_embeddings, all_attention_mask, token_types
+
 def construct_logit_mask(label_mask):
     # 9 is the shift from format_answer excluding the end of sentence token
     logit_mask = torch.zeros_like(label_mask)
@@ -492,7 +586,8 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
     # Format the result without any extra processing
     return visible_text
 
-def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_mask, reasoning_steps=5, max_new_tokens=50):
+def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_mask,
+                                         reasoning_steps=5, max_new_tokens=50, temp=0.0):
     """
     Generate text with latent reasoning steps in batch mode, returning only the token tensors.
     

@@ -9,7 +9,7 @@ from utils import format_prompt, format_answer
 from tqdm import tqdm
 
 
-def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30):
+def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30, temp=0.0):
     model.eval()
     all_qa = []
     
@@ -30,7 +30,8 @@ def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30):
                 input_ids=question,
                 attention_mask=question_mask,
                 reasoning_steps=reasoning_steps,
-                max_new_tokens=100
+                max_new_tokens=100,
+                temp=temp,
             )
             
             # Process outputs and extract answers
