@@ -43,7 +43,7 @@ def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30):
             predictions = [o.replace(eos_string, '').strip() for o in outputs]
             q_decode = [tokenizer.decode(question[i], skip_special_tokens=True) for i in range(len(question))]
             a_decode = [tokenizer.decode(answer[i], skip_special_tokens=True) for i in range(len(answer))]
-            qa = [(q_decode, a_decode, predictions[i]) for i in range(len(predictions))]
+            qa = [(q_decode[i], a_decode[i], predictions[i]) for i in range(len(predictions))]
             all_qa.extend(qa)
     
     return all_qa
