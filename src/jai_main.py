@@ -80,7 +80,13 @@ def main():
     # Test latent reasoning
     print("Testing latent reasoning")
     preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps)
-    print(preds)
+    for i, pred in enumerate(preds):
+        print()
+        print(f'Question {i}:', pred[0])
+        print()
+        print(f'Correct Answer {i}:', pred[1])
+        print()
+        print(f'Answer {i}:', pred[2])
 
 
 if __name__ == "__main__":

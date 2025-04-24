@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30):
     model.eval()
-    all_preds = []
+    all_qa = []
     
     with torch.no_grad():
         for question, question_mask, answer, answer_mask in tqdm(dataloader):
@@ -41,9 +41,12 @@ def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30):
             outputs = [tokenizer.decode(output_tokens[i, a_start:-1], skip_special_tokens=True) for i in range(batch_size)]
             eos_string = '<｜end▁of▁sentence｜>'
             predictions = [o.replace(eos_string, '').strip() for o in outputs]
-            all_preds.extend(predictions)
+            q_decode = [tokenizer.decode(question[i], skip_special_tokens=True) for i in range(len(question))]
+            a_decode = [tokenizer.decode(answer[i], skip_special_tokens=True) for i in range(len(answer))]
+            qa = [(q_decode, a_decode, predictions[i]) for i in range(len(predictions))]
+            all_qa.extend(qa)
     
-    return all_preds
+    return all_qa
 
 
 def evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=30):
