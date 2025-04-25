@@ -1,0 +1,643 @@
+[
+  {
+    "exercise": "3.1a",
+    "text": "Suppose f : R → R is convex, and a, b ∈ dom f with a < b. Show that f(x) ≤ (b - x)/(b - a) f(a) + (x - a)/(b - a) f(b) for all x ∈ [a, b].",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.1b",
+    "text": "Show that (f(x) - f(a))/(x - a) ≤ (f(b) - f(a))/(b - a) ≤ (f(b) - f(x))/(b - x) for all x ∈ (a, b). Draw a sketch that illustrates this inequality.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.1c",
+    "text": "Suppose f is differentiable. Use the result in (b) to show that f'(a) ≤ (f(b) - f(a))/(b - a) ≤ f'(b). Note that these inequalities also follow from (3.2): f(b) ≥ f(a) + f'(a)(b - a), f(a) ≥ f(b) + f'(b)(a - b).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.1d",
+    "text": "Suppose f is twice differentiable. Use the result in (c) to show that f''(a) ≥ 0 and f''(b) ≥ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.3",
+    "text": "Inverse of an increasing convex function. Suppose f : R → R is increasing and convex on its domain (a, b). Let g denote its inverse, i.e., the function with domain (f(a), f(b)) and g(f(x)) = x for a < x < b. What can you say about convexity or concavity of g?",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "3.4",
+    "text": "[RV73, page 15] Show that a continuous function f : R^n → R is convex if and only if for every line segment, its average value on the segment is less than or equal to the average of its values at the endpoints of the segment: For every x, y ∈ R^n, ∫₀¹ f(x + λ(y - x)) dλ ≤ (f(x) + f(y))/2.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.5",
+    "text": "[RV73, page 22] Running average of a convex function. Suppose f : R → R is convex, with R₊ ⊆ dom f. Show that its running average F, defined as F(x) = (1/x)∫₀ˣ f(t) dt, dom F = R₊₊, is convex. You can assume f is differentiable.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.6",
+    "text": "Functions and epigraphs. When is the epigraph of a function a halfspace? When is the epigraph of a function a convex cone? When is the epigraph of a function a polyhedron?",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "3.7",
+    "text": "Suppose f : R^n → R is convex with dom f = R^n, and bounded above on R^n. Show that f is constant.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.8",
+    "text": "Second-order condition for convexity. Prove that a twice differentiable function f is convex if and only if its domain is convex and ∇²f(x) ≽ 0 for all x ∈ dom f. Hint. First consider the case f : R → R. You can use the first-order condition for convexity (which was proved on page 70).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.9a",
+    "text": "Second-order conditions for convexity on an affine set. Let F ∈ R^n×m, x̂ ∈ R^n. The restriction of f : R^n → R to the affine set {Fz + x̂ | z ∈ R^m} is defined as the function f̃ : R^m → R with f̃(z) = f(Fz + x̂), dom f̃ = {z | Fz + x̂ ∈ dom f}. Suppose f is twice differentiable with a convex domain. Show that f̃ is convex if and only if for all z ∈ dom f̃, F^T ∇²f(Fz + x̂)F ≽ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.9b",
+    "text": "Suppose A ∈ R^p×n is a matrix whose nullspace is equal to the range of F, i.e., AF = 0 and rank A = n - rank F. Show that f̃ is convex if and only if for all z ∈ dom f̃ there exists a λ ∈ R such that ∇²f(Fz + x̂) + λA^T A ≽ 0. Hint. Use the following result: If B ∈ S^n and A ∈ R^p×n, then x^T Bx ≥ 0 for all x ∈ N(A) if and only if there exists a λ such that B + λA^T A ≽ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.10a",
+    "text": "An extension of Jensen's inequality. One interpretation of Jensen's inequality is that randomization or dithering hurts, i.e., raises the average value of a convex function: For f convex and v a zero mean random variable, we have E f(x₀ + v) ≥ f(x₀). This leads to the following conjecture. If f₀ is convex, then the larger the variance of v, the larger E f(x₀ + v). Give a counterexample that shows that this conjecture is false. Find zero mean random variables v and w, with var(v) > var(w), a convex function f, and a point x₀, such that E f(x₀ + v) < E f(x₀ + w).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "3.10b",
+    "text": "The conjecture is true when v and w are scaled versions of each other. Show that E f(x₀ + tv) is monotone increasing in t ≥ 0, when f is convex and v is zero mean.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.11",
+    "text": "Monotone mappings. A function ψ : R^n → R^n is called monotone if for all x, y ∈ dom ψ, (ψ(x) - ψ(y))^T(x - y) ≥ 0. (Note that 'monotone' as defined here is not the same as the definition given in §3.6.1. Both definitions are widely used.) Suppose f : R^n → R is a differentiable convex function. Show that its gradient ∇f is monotone. Is the converse true, i.e., is every monotone mapping the gradient of a convex function?",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.12",
+    "text": "Suppose f : R^n → R is convex, g : R^n → R is concave, dom f = dom g = R^n, and for all x, g(x) ≤ f(x). Show that there exists an affine function h such that for all x, g(x) ≤ h(x) ≤ f(x). In other words, if a concave function g is an underestimator of a convex function f, then we can fit an affine function between f and g.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.13",
+    "text": "Kullback-Leibler divergence and the information inequality. Let D_kl be the Kullback-Leibler divergence, as defined in (3.17). Prove the information inequality: D_kl(u, v) ≥ 0 for all u, v ∈ R^n₊₊. Also show that D_kl(u, v) = 0 if and only if u = v. Hint. The Kullback-Leibler divergence can be expressed as D_kl(u, v) = f(u) - f(v) - ∇f(v)^T(u - v), where f(v) = ∑ᵢ₌₁ⁿ vᵢ log vᵢ is the negative entropy of v.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.14a",
+    "text": "Convex-concave functions and saddle-points. We say the function f : R^n × R^m → R is convex-concave if f(x, z) is a concave function of z, for each fixed x, and a convex function of x, for each fixed z. We also require its domain to have the product form dom f = A × B, where A ⊆ R^n and B ⊆ R^m are convex. Give a second-order condition for a twice differentiable function f : R^n × R^m → R to be convex-concave, in terms of its Hessian ∇²f(x, z).",
+    "type": "answer-based",
+    "answer": "∇²_{xx} f(x, z) ≽ 0 and ∇²_{zz} f(x, z) ≼ 0 for all (x, z)."
+  },
+  {
+    "exercise": "3.14b",
+    "text": "Suppose that f : R^n×R^m → R is convex-concave and differentiable, with ∇f(x̃, z̃) = 0. Show that the saddle-point property holds: for all x, z, we have f(x̃, z) ≤ f(x̃, z̃) ≤ f(x, z̃). Show that this implies that f satisfies the strong max-min property: sup_z inf_x f(x, z) = inf_x sup_z f(x, z) (and their common value is f(x̃, z̃)).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.14c",
+    "text": "Now suppose that f : R^n × R^m → R is differentiable, but not necessarily convex-concave, and the saddle-point property holds at x̃, z̃: f(x̃, z) ≤ f(x̃, z̃) ≤ f(x, z̃) for all x, z. Show that ∇f(x̃, z̃) = 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.15a",
+    "text": "A family of concave utility functions. For 0 < α ≤ 1 let u_α(x) = (x^α - 1)/α, with dom u_α = R₊. We also define u₀(x) = log x (with dom u₀ = R₊₊). Show that for x > 0, u₀(x) = lim_{α→0} u_α(x).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.15b",
+    "text": "Show that u_α are concave, monotone increasing, and all satisfy u_α(1) = 0. These functions are often used in economics to model the benefit or utility of some quantity of goods or money. Concavity of u_α means that the marginal utility (i.e., the increase in utility obtained for a fixed increase in the goods) decreases as the amount of goods increases. In other words, concavity models the effect of satiation.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.16a",
+    "text": "For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave. f(x) = e^x - 1 on R.",
+    "type": "answer-based",
+    "answer": "convex, quasiconvex, quasiconcave"
+  },
+  {
+    "exercise": "3.16b",
+    "text": "For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave. f(x₁, x₂) = x₁x₂ on R²₊₊.",
+    "type": "answer-based",
+    "answer": "quasiconcave"
+  },
+  {
+    "exercise": "3.16c",
+    "text": "For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave. f(x₁, x₂) = 1/(x₁x₂) on R²₊₊.",
+    "type": "answer-based",
+    "answer": "convex, quasiconvex"
+  },
+  {
+    "exercise": "3.16d",
+    "text": "For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave. f(x₁, x₂) = x₁/x₂ on R²₊₊.",
+    "type": "answer-based",
+    "answer": "quasiconvex, quasiconcave"
+  },
+  {
+    "exercise": "3.16e",
+    "text": "For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave. f(x₁, x₂) = x₁²/x₂ on R × R₊₊.",
+    "type": "answer-based",
+    "answer": "convex, quasiconvex"
+  },
+  {
+    "exercise": "3.16f",
+    "text": "For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave. f(x₁, x₂) = x₁^α x₂^(1-α), where 0 ≤ α ≤ 1, on R²₊₊.",
+    "type": "answer-based",
+    "answer": "concave, quasiconcave"
+  },
+  {
+    "exercise": "3.17",
+    "text": "Suppose p < 1, p ≠ 0. Show that the function f(x) = (∑ᵢ₌₁ⁿ xᵢᵖ)^(1/p) with dom f = R^n₊₊ is concave. This includes as special cases f(x) = (∑ᵢ₌₁ⁿ x₁^(1/2))² and the harmonic mean f(x) = (∑ᵢ₌₁ⁿ 1/xᵢ)^(-1). Hint. Adapt the proofs for the log-sum-exp function and the geometric mean in §3.1.5.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.18a",
+    "text": "Adapt the proof of concavity of the log-determinant function in §3.1.5 to show the following. f(X) = tr(X⁻¹) is convex on dom f = S^n₊₊.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.18b",
+    "text": "f(X) = (det X)^(1/n) is concave on dom f = S^n₊₊.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.19a",
+    "text": "Nonnegative weighted sums and integrals. Show that f(x) = ∑ᵢ₌₁ʳ αᵢx[i] is a convex function of x, where α₁ ≥ α₂ ≥ ... ≥ αᵣ ≥ 0, and x[i] denotes the ith largest component of x. (You can use the fact that f(x) = ∑ᵏᵢ₌₁ x[i] is convex on R^n.)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.19b",
+    "text": "Let T(x, ω) denote the trigonometric polynomial T(x, ω) = x₁ + x₂ cos ω + x₃ cos 2ω + ... + xₙ cos(n-1)ω. Show that the function f(x) = -∫₀^(2π) log T(x, ω) dω is convex on {x ∈ R^n | T(x, ω) > 0, 0 ≤ ω ≤ 2π}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.20a",
+    "text": "Composition with an affine function. Show that the following functions f : R^n → R are convex. f(x) = ||Ax - b||, where A ∈ R^m×n, b ∈ R^m, and || · || is a norm on R^m.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.20b",
+    "text": "f(x) = -(det(A₀ + x₁A₁ + ... + xₙAₙ))^(1/m), on {x | A₀ + x₁A₁ + ... + xₙAₙ ≻ 0}, where Aᵢ ∈ S^m.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.20c",
+    "text": "f(X) = tr(A₀ + x₁A₁ + ... + xₙAₙ)^(-1), on {x | A₀+x₁A₁+...+xₙAₙ ≻ 0}, where Aᵢ ∈ S^m. (Use the fact that tr(X^(-1)) is convex on S^m₊₊; see exercise 3.18.)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.21a",
+    "text": "Pointwise maximum and supremum. Show that the following functions f : R^n → R are convex. f(x) = max_{i=1,...,k} ||A^(i)x - b^(i)||, where A^(i) ∈ R^m×n, b^(i) ∈ R^m and || · || is a norm on R^m.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.21b",
+    "text": "f(x) = ∑ᵣᵢ₌₁ |x|[i] on R^n, where |x| denotes the vector with |x|ᵢ = |xᵢ| (i.e., |x| is the absolute value of x, componentwise), and |x|[i] is the ith largest component of |x|. In other words, |x|[1], |x|[2], ..., |x|[n] are the absolute values of the components of x, sorted in nonincreasing order.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.22a",
+    "text": "Composition rules. Show that the following functions are convex. f(x) = -log(-log(∑ᵐᵢ₌₁ e^(aᵢᵀx+bᵢ))) on dom f = {x | ∑ᵐᵢ₌₁ e^(aᵢᵀx+bᵢ) < 1}. You can use the fact that log(∑ⁿᵢ₌₁ e^yᵢ) is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.22b",
+    "text": "f(x, u, v) = -√(uv - x^T x) on dom f = {(x, u, v) | uv > x^T x, u, v > 0}. Use the fact that x^T x/u is convex in (x, u) for u > 0, and that -√(x₁x₂) is convex on R²₊₊.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.22c",
+    "text": "f(x, u, v) = -log(uv - x^T x) on dom f = {(x, u, v) | uv > x^T x, u, v > 0}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.22d",
+    "text": "f(x,t) = -(t^p - ||x||ᵖₚ)^(1/p) where p > 1 and dom f = {(x,t) | t ≥ ||x||ₚ}. You can use the fact that ||x||ᵖₚ/u^(p-1) is convex in (x, u) for u > 0 (see exercise 3.23), and that -x₁^(1/p)y₁^(1-1/p) is convex on R²₊ (see exercise 3.16).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.22e",
+    "text": "f(x,t) = -log(t^p - ||x||ᵖₚ) where p > 1 and dom f = {(x,t) | t > ||x||ₚ}. You can use the fact that ||x||ᵖₚ/u^(p-1) is convex in (x, u) for u > 0 (see exercise 3.23).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.23a",
+    "text": "Perspective of a function. Show that for p > 1, f(x,t) = (|x₁|^p + ... + |xₙ|^p)/t^(p-1) = ||x||ᵖₚ/t^(p-1) is convex on {(x,t) | t > 0}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.23b",
+    "text": "Show that f(x) = ||Ax + b||²₂/(c^T x + d) is convex on {x | c^T x + d > 0}, where A ∈ R^m×n, b ∈ R^m, c ∈ R^n and d ∈ R.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.24a",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave. E x.",
+    "type": "answer-based",
+    "answer": "convex, quasiconvex, concave, quasiconcave"
+  },
+  {
+    "exercise": "3.24b",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave. prob(x ≥ α).",
+    "type": "answer-based",
+    "answer": "convex, quasiconvex, concave, quasiconcave"
+  },
+  {
+    "exercise": "3.24c",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave.. prob(α ≤ x ≤ β).",
+    "type": "answer-based",
+    "answer": "convex, quasiconvex, concave, quasiconcave"
+  },
+  {
+    "exercise": "3.24d",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave. ∑ⁿᵢ₌₁ pᵢ log pᵢ, the negative entropy of the distribution.",
+    "type": "answer-based",
+    "answer": "convex, quasiconvex"
+  },
+  {
+    "exercise": "3.24e",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave. var x = E(x - E x)².",
+    "type": "answer-based",
+    "answer": "concave, quasiconcave"
+  },
+  {
+    "exercise": "3.24f",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave. quartile(x) = inf{β | prob(x ≤ β) ≥ 0.25}.",
+    "type": "answer-based",
+    "answer": "quasiconvex, quasiconcave"
+  },
+  {
+    "exercise": "3.24g",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave. The cardinality of the smallest set A ⊆ {a₁, ..., aₙ} with probability ≥ 90%. (By cardinality we mean the number of elements in A.)",
+    "type": "answer-based",
+    "answer": "quasiconcave"
+  },
+  {
+    "exercise": "3.24h",
+    "text": "Some functions on the probability simplex. Let x be a real-valued random variable which takes values in {a₁, ..., aₙ} where a₁ < a₂ < ... < aₙ, with prob(x = aᵢ) = pᵢ, i = 1, ..., n. For each of the following functions of p (on the probability simplex {p ∈ R^n₊ | 1^T p = 1}), determine if the function is convex, concave, quasiconvex, or quasiconcave. The minimum width interval that contains 90% of the probability, i.e., inf{β - α | prob(α ≤ x ≤ β) ≥ 0.9}.",
+    "type": "answer-based",
+    "answer": "quasiconcave"
+  },
+  {
+    "exercise": "3.25",
+    "text": "Maximum probability distance between distributions. Let p, q ∈ R^n represent two probability distributions on {1,...,n} (so p, q ≽ 0, 1^T p = 1^T q = 1). We define the maximum probability distance d_mp(p, q) between p and q as the maximum difference in probability assigned by p and q, over all events: d_mp(p, q) = max{| prob(p, C) - prob(q, C)| | C ⊆ {1, ..., n}}. Here prob(p, C) is the probability of C, under the distribution p, i.e., prob(p, C) = ∑ᵢ∈C pᵢ. Find a simple expression for d_mp, involving ||p - q||₁ = ∑ⁿᵢ₌₁ |pᵢ - qᵢ|, and show that d_mp is a convex function on R^n × R^n. (Its domain is {(p, q) | p, q ≽ 0, 1^T p = 1^T q = 1}, but it has a natural extension to all of R^n × R^n.)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.26a",
+    "text": "More functions of eigenvalues. Let λ₁(X) ≥ λ₂(X) ≥ ... ≥ λₙ(X) denote the eigenvalues of a matrix X ∈ S^n. Show that ∑ᵏᵢ₌₁ λᵢ(X) is convex on S^n. Hint. [HJ85, page 191] Use the variational characterization ∑ᵏᵢ₌₁ λᵢ(X) = sup{tr(V^T XV) | V ∈ R^n×k, V^T V = I}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.26b",
+    "text": "Geometric mean of k smallest eigenvalues. Show that (∏ⁿᵢ₌ₙ₋ₖ₊₁ λᵢ(X))^(1/k) is concave on S^n₊₊. Hint. [MO79, page 513] For X ≻ 0, we have (∏ⁿᵢ₌ₙ₋ₖ₊₁ λᵢ(X))^(1/k) = (1/k) inf{tr(V^T XV) | V ∈ R^n×k, det V^T V = 1}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.26c",
+    "text": "Log of product of k smallest eigenvalues. Show that ∑ⁿᵢ₌ₙ₋ₖ₊₁ log λᵢ(X) is concave on S^n₊₊. Hint. [MO79, page 513] For X ≻ 0, ∏ⁿᵢ₌ₙ₋ₖ₊₁ λᵢ(X) = inf{∏ⁿᵢ₌₁ (V^T XV)ᵢᵢ | V ∈ R^n×k, V^T V = I}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.27",
+    "text": "Diagonal elements of Cholesky factor. Each X ∈ S^n₊₊ has a unique Cholesky factorization X = LL^T, where L is lower triangular, with Lᵢᵢ > 0. Show that Lᵢᵢ is a concave function of X (with domain S^n₊₊). Hint. Lᵢᵢ can be expressed as Lᵢᵢ = (w - z^T Y^(-1)z)^(1/2), where [[Y, z], [z^T, w]] is the leading k × k submatrix of X.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.28a",
+    "text": "Expressing a convex function as the pointwise supremum of a family of affine functions. In this problem we extend the result proved on page 83 to the case where dom f ≠ R^n. Let f : R^n → R be a convex function. Define f̃ : R^n → R as the pointwise supremum of all affine functions that are global underestimators of f: f̃(x) = sup{g(x) | g affine, g(z) ≤ f(z) for all z}. Show that f(x) = f̃(x) for x ∈ int dom f.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.28b",
+    "text": "Show that f = f̃ if f is closed (i.e., epi f is a closed set; see §A.3.3).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.29",
+    "text": "Representation of piecewise-linear convex functions. A function f : R^n → R, with dom f = R^n, is called piecewise-linear if there exists a partition of R^n as R^n = X₁ ∪ X₂ ∪ ... ∪ X_L, where int X_i ≠ ∅ and int X_i ∩ int X_j = ∅ for i ≠ j, and a family of affine functions a_1^T x + b_1, ..., a_L^T x + b_L such that f(x) = a_i^T x + b_i for x ∈ X_i. Show that this means that f(x) = max{a_1^T x + b_1, ..., a_L^T x + b_L}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.30",
+    "text": "Convex hull or envelope of a function. The convex hull or convex envelope of a function f : R^n → R is defined as g(x) = inf{t | (x,t) ∈ conv epi f}. Geometrically, the epigraph of g is the convex hull of the epigraph of f. Show that g is the largest convex underestimator of f. In other words, show that if h is convex and satisfies h(x) ≤ f(x) for all x, then h(x) ≤ g(x) for all x.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.31a",
+    "text": "[Roc70, page 35] Largest homogeneous underestimator. Let f be a convex function. Define the function g as g(x) = inf_{α>0} f(αx)/α. Show that g is homogeneous (g(tx) = tg(x) for all t ≥ 0).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.31b",
+    "text": "Show that g is the largest homogeneous underestimator of f: If h is homogeneous and h(x) ≤ f(x) for all x, then we have h(x) ≤ g(x) for all x.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.31c",
+    "text": "Show that g is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.32a",
+    "text": "Products and ratios of convex functions. In general the product or ratio of two convex functions is not convex. However, there are some results that apply to functions on R. Prove the following. If f and g are convex, both nondecreasing (or nonincreasing), and positive functions on an interval, then fg is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.32b",
+    "text": "If f, g are concave, positive, with one nondecreasing and the other nonincreasing, then fg is concave.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.32c",
+    "text": "If f is convex, nondecreasing, and positive, and g is concave, nonincreasing, and positive, then f/g is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.33",
+    "text": "Direct proof of perspective theorem. Give a direct proof that the perspective function g, as defined in §3.2.6, of a convex function f is convex: Show that dom g is a convex set, and that for (x,t), (y,s) ∈ dom g, and 0 ≤ θ ≤ 1, we have g(θx + (1 - θ)y, θt + (1 - θ)s) ≤ θg(x,t) + (1 - θ)g(y,s).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.34a",
+    "text": "The Minkowski function. The Minkowski function of a convex set C is defined as M_C(x) = inf{t > 0 | t^(-1)x ∈ C}. Draw a picture giving a geometric interpretation of how to find M_C(x).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "3.34b",
+    "text": "The Minkowski function. The Minkowski function of a convex set C is defined as M_C(x) = inf{t > 0 | t^(-1)x ∈ C}. Show that M_C is homogeneous, i.e., M_C(αx) = αM_C(x) for α ≥ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.34c",
+    "text": "The Minkowski function. The Minkowski function of a convex set C is defined as M_C(x) = inf{t > 0 | t^(-1)x ∈ C}. What is dom M_C?",
+    "type": "answer-based",
+    "answer": "dom M_C = {x | x/t ∈ C for some t > 0}"
+  },
+  {
+    "exercise": "3.34d",
+    "text": "The Minkowski function. The Minkowski function of a convex set C is defined as M_C(x) = inf{t > 0 | t^(-1)x ∈ C}. Show that M_C is a convex function.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.34e",
+    "text": "The Minkowski function. The Minkowski function of a convex set C is defined as M_C(x) = inf{t > 0 | t^(-1)x ∈ C}. Suppose C is also closed, symmetric (if x ∈ C then -x ∈ C), and has nonempty interior. Show that M_C is a norm. What is the corresponding unit ball?",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.35a",
+    "text": "Support function calculus. Recall that the support function of a set C ⊆ R^n is defined as S_C(y) = sup{y^T x | x ∈ C}. On page 81 we showed that S_C is a convex function. Show that S_B = S_{conv B}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.35b",
+    "text": "Support function calculus. Recall that the support function of a set C ⊆ R^n is defined as S_C(y) = sup{y^T x | x ∈ C}. Show that S_{A+B} = S_A + S_B.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.35c",
+    "text": "Support function calculus. Recall that the support function of a set C ⊆ R^n is defined as S_C(y) = sup{y^T x | x ∈ C}. Show that S_{A∪B} = max{S_A, S_B}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.35d",
+    "text": "Let B be closed and convex. Show that A ⊆ B if and only if S_A(y) ≤ S_B(y) for all y.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.36a",
+    "text": "Derive the conjugates of the following functions. Max function. f(x) = max_{i=1,...,n} x_i on R^n.",
+    "type": "answer-based",
+    "answer": "f*(y) = 0 if y ⪰ 0 and 1^T y = 1, f*(y) = +∞ otherwise."
+  },
+  {
+    "exercise": "3.36b",
+    "text": "Derive the conjugates of the following functions. Sum of largest elements. f(x) = ∑^r_{i=1} x_{[i]} on R^n.",
+    "type": "answer-based",
+    "answer": "f*(y) = 0 if 1 ⪰ y ⪰ 0 and 1^T y = r, f*(y) = +∞ otherwise."
+  },
+  {
+    "exercise": "3.36c",
+    "text": "Derive the conjugates of the following functions. Piecewise-linear function on R. f(x) = max_{i=1,...,m}(a_ix + b_i) on R. You can assume that the a_i are sorted in increasing order, i.e., a_1 ≤ ... ≤ a_m, and that none of the functions a_ix + b_i is redundant, i.e., for each k there is at least one x with f(x) = a_kx + b_k.",
+    "type": "answer-based",
+    "answer": "f*(y) = - b_i - (b_{i + 1} - b_i) * (y - a_i)/(a_{i + 1} - a_i) if a_i ≤ y < a_{i + 1}, f*(y) = +∞ otherwise."
+  },
+  {
+    "exercise": "3.36d-1",
+    "text": "Derive the conjugates of the following functions. Power function. f(x) = x^p on R_++, where p > 1.",
+    "type": "answer-based",
+    "answer": "f*(y) = 0 if y <= 0 and f*(y) = (p - 1)*(y/p)^(p/(p - 1)) if y > 0."
+  },
+  {
+    "exercise": "3.36d-2",
+    "text": "Derive the conjugates of the following functions. Power function. f(x) = x^p on R_++, where p < 0.",
+    "type": "answer-based",
+    "answer": "f*(y) = 0 if y >= 0 and f*(y) = (1 - p)*(- y/p)^(p/(p - 1)) if y < 0."
+  },
+  {
+    "exercise": "3.36e",
+    "text": "Derive the conjugates of the following functions. Geometric mean. f(x) = -(∏ x_i)^{1/n} on R^n_++.",
+    "type": "answer-based",
+    "answer": "f*(y) = 0 if 0 ⪰ y and (prod_i (-y_i))^{1/n} >= 1/n, f*(y) = +∞ otherwise."
+  },
+  {
+    "exercise": "3.36f",
+    "text": "Derive the conjugates of the following functions. Negative generalized logarithm for second-order cone. f(x,t) = -log(t^2 - x^T x) on {(x,t) ∈ R^n × R | ||x||_2 < t}.",
+    "type": "answer-based",
+    "answer": "f*(y,s) = -2 + log 4 - log(s^2 - ||y||_2^2) on {s < 0, ||y||_2 < - s}, f*(y,s) = +∞ otherwise."
+  },
+  {
+    "exercise": "3.37",
+    "text": "Show that the conjugate of f(X) = tr(X^{-1}) with dom f = S^n_++ is given by f*(Y) = -2 tr(-Y)^{1/2}, dom f* = -S^n_+. Hint. The gradient of f is ∇f(X) = -X^{-2}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.38",
+    "text": "Young's inequality. Let f : R → R be an increasing function, with f(0) = 0, and let g be its inverse. Define F and G as F(x) = ∫^x_0 f(a) da, G(y) = ∫^y_0 g(a) da. Show that F and G are conjugates. Give a simple graphical interpretation of Young's inequality, xy ≤ F(x) + G(y).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.39a",
+    "text": "Properties of conjugate functions. Conjugate of convex plus affine function. Define g(x) = f(x) + c^T x + d, where f is convex. Express g* in terms of f* (and c, d).",
+    "type": "answer-based",
+    "answer": "g*(y) = f*(y - c) + d"
+  },
+  {
+    "exercise": "3.39b",
+    "text": "Conjugate of perspective. Express the conjugate of the perspective of a convex function f in terms of f*.",
+    "type": "answer-based",
+    "answer": "g*(y, s) = 0 if s + f*(y) <= 0 and g*(y, s) = +∞ otherwise."
+  },
+  {
+    "exercise": "3.39c",
+    "text": "Conjugate and minimization. Let f(x, z) be convex in (x, z) and define g(x) = inf_z f(x, z). Express the conjugate g* in terms of f*. As an application, express the conjugate of g(x) = inf_z{h(z) | Az + b = x}, where h is convex, in terms of h*, A, and b.",
+    "type": "answer-based",
+    "answer": "g*(y) = f*(y, 0) = b^T y + h*(A^T y) if A^T y + b = 0, g*(y) = +∞ otherwise."
+  },
+  {
+    "exercise": "3.39d",
+    "text": "Conjugate of conjugate. Show that the conjugate of the conjugate of a closed convex function is itself: f = f** if f is closed and convex. (A function is closed if its epigraph is closed; see §A.3.3.) Hint. Show that f** is the pointwise supremum of all affine global underestimators of f. Then apply the result of exercise 3.28.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.40a",
+    "text": "Gradient and Hessian of conjugate function. Suppose f : R^n → R is convex and twice continuously differentiable. Suppose ȳ and x̄ are related by ȳ = ∇f(x̄), and that ∇^2f(x̄) ≻ 0. Show that ∇f*(ȳ) = x̄.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.40b",
+    "text": "Show that ∇^2f*(ȳ) = ∇^2f(x̄)^{-1}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.41",
+    "text": "Domain of conjugate function. Suppose f : R^n → R is a twice differentiable convex function and x ∈ dom f. Show that for small enough u we have y = ∇f(x) + ∇^2f(x)u ∈ dom f*, i.e., y^T x - f(x) is bounded above. It follows that dim(dom f*) ≥ rank ∇^2f(x). Hint. Consider ∇f(x + tv), where t is small, and v is any vector in R^n.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.42",
+    "text": "Approximation width. Let f_0, ..., f_n : R → R be given continuous functions. We consider the problem of approximating f_0 as a linear combination of f_1, ..., f_n. For x ∈ R^n, we say that f = x_1f_1 + ... + x_nf_n approximates f_0 with tolerance ε > 0 over the interval [0, T] if |f(t) - f_0(t)| ≤ ε for 0 ≤ t ≤ T. Now we choose a fixed tolerance ε > 0 and define the approximation width as the largest T such that f approximates f_0 over the interval [0, T]: W(x) = sup{T | |x_1f_1(t) + ... + x_nf_n(t) - f_0(t)| ≤ ε for 0 ≤ t ≤ T}. Show that W is quasiconcave.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.43",
+    "text": "First-order condition for quasiconvexity. Prove the first-order condition for quasiconvexity given in §3.4.3: A differentiable function f : R^n → R, with dom f convex, is quasiconvex if and only if for all x, y ∈ dom f, f(y) ≤ f(x) =⇒ ∇f(x)^T(y - x) ≤ 0. Hint. It suffices to prove the result for a function on R; the general result follows by restriction to an arbitrary line.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.44a",
+    "text": "Second-order conditions for quasiconvexity. In this problem we derive alternate representations of the second-order conditions for quasiconvexity given in §3.4.3. Prove the following. A point x ∈ dom f satisfies (3.21) if and only if there exists a σ such that ∇^2f(x) + σ∇f(x)∇f(x)^T ≽ 0. It satisfies (3.22) for all y ≠ 0 if and only if there exists a σ such ∇^2f(x) + σ∇f(x)∇f(x)^T ≻ 0. Hint. We can assume without loss of generality that ∇^2f(x) is diagonal.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.44b",
+    "text": "A point x ∈ dom f satisfies (3.21) if and only if either ∇f(x) = 0 and ∇^2f(x) ≽ 0, or ∇f(x) ≠ 0 and the matrix H(x) = [[∇^2f(x), ∇f(x)], [∇f(x)^T, 0]] has exactly one negative eigenvalue. It satisfies (3.22) for all y ≠ 0 if and only if H(x) has exactly one nonpositive eigenvalue. Hint. You can use the result of part (a). The following result, which follows from the eigenvalue interlacing theorem in linear algebra, may also be useful: If B ∈ S^n and a ∈ R^n, then λ_n([[B, a], [a^T, 0]]) ≥ λ_n(B).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.45",
+    "text": "Use the first and second-order conditions for quasiconvexity given in §3.4.3 to verify quasiconvexity of the function f(x) = -x_1x_2, with dom f = R^2_++.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.46",
+    "text": "Quasilinear functions with domain R^n. A function on R that is quasilinear (i.e., quasiconvex and quasiconcave) is monotone, i.e., either nondecreasing or nonincreasing. In this problem we consider a generalization of this result to functions on R^n. Suppose the function f : R^n → R is quasilinear and continuous with dom f = R^n. Show that it can be expressed as f(x) = g(a^T x), where g : R → R is monotone and a ∈ R^n. In other words, a quasilinear function with domain R^n must be a monotone function of a linear function. (The converse is also true.)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.47",
+    "text": "Suppose f : R^n → R is differentiable, dom f is convex, and f(x) > 0 for all x ∈ dom f. Show that f is log-concave if and only if for all x, y ∈ dom f, f(y)/f(x) ≤ exp(∇f(x)^T(y - x)/f(x)).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.48",
+    "text": "Show that if f : R^n → R is log-concave and a ≥ 0, then the function g = f - a is log-concave, where dom g = {x ∈ dom f | f(x) > a}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.49a",
+    "text": "Show that the following functions are log-concave. Logistic function: f(x) = e^x/(1 + e^x) with dom f = R.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.49b",
+    "text": "Harmonic mean: f(x) = 1/(1/x_1 + ... + 1/x_n), dom f = R^n_++.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.49c",
+    "text": "Product over sum: f(x) = (∏^n_{i=1} x_i)/(∑^n_{i=1} x_i), dom f = R^n_++.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.49d",
+    "text": "Determinant over trace: f(X) = (det X)/(tr X), dom f = S^n_++.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.50",
+    "text": "Coefficients of a polynomial as a function of the roots. Show that the coefficients of a polynomial with real negative roots are log-concave functions of the roots. In other words, the functions a_i : R^n → R, defined by the identity s^n + a_1(λ)s^{n-1} + ... + a_{n-1}(λ)s + a_n(λ) = (s - λ_1)(s - λ_2)...(s - λ_n), are log-concave on -R^n_++. Hint. The function S_k(x) = ∑_{1≤i_1<i_2<...<i_k≤n} x_{i_1} x_{i_2} ... x_{i_k}, with dom S_k ∈ R^n_+ and 1 ≤ k ≤ n, is called the kth elementary symmetric function on R^n. It can be shown that S_k^{1/k} is concave (see [ML57]).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.51",
+    "text": "[BL00, page 41] Let p be a polynomial on R, with all its roots real. Show that it is log-concave on any interval on which it is positive.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.52",
+    "text": "[MO79, §3.E.2] Log-convexity of moment functions. Suppose f : R → R is nonnegative with R_+ ⊆ dom f. For x ≥ 0 define φ(x) = ∫^∞_0 u^x f(u) du. Show that φ is a log-convex function. (If x is a positive integer, and f is a probability density function, then φ(x) is the xth moment of the distribution.) Use this to show that the Gamma function, Γ(x) = ∫^∞_0 u^{x-1} e^{-u} du, is log-convex for x ≥ 1.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.53",
+    "text": "Suppose x and y are independent random vectors in R^n, with log-concave probability density functions f and g, respectively. Show that the probability density function of the sum z = x + y is log-concave.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.54a",
+    "text": "Log-concavity of Gaussian cumulative distribution function. The cumulative distribution function of a Gaussian random variable, f(x) = (1/√(2π))∫^x_{-∞} e^{-t^2/2} dt, is log-concave. This follows from the general result that the convolution of two log-concave functions is log-concave. In this problem we guide you through a simple self-contained proof that f is log-concave. Recall that f is log-concave if and only if f''(x)f(x) ≤ f'(x)^2 for all x. Verify that f''(x)f(x) ≤ f'(x)^2 for x ≥ 0. That leaves us the hard part, which is to show the inequality for x < 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.54b",
+    "text": "Verify that for any t and x we have t^2/2 ≥ -x^2/2 + xt.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.54c",
+    "text": "Using part (b) show that e^{-t^2/2} ≤ e^{x^2/2-xt}. Conclude that ∫^x_{-∞} e^{-t^2/2} dt ≤ e^{x^2/2} ∫^x_{-∞} e^{-xt} dt.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.54d",
+    "text": "Use part (c) to verify that f''(x)f(x) ≤ f'(x)^2 for x ≤ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.55a",
+    "text": "Log-concavity of the cumulative distribution function of a log-concave probability density. In this problem we extend the result of exercise 3.54. Let g(t) = exp(-h(t)) be a differentiable log-concave probability density function, and let f(x) = ∫^x_{-∞} g(t) dt = ∫^x_{-∞} e^{-h(t)} dt be its cumulative distribution. We will show that f is log-concave, i.e., it satisfies f''(x)f(x) ≤ (f'(x))^2 for all x. Express the derivatives of f in terms of the function h. Verify that f''(x)f(x) ≤ (f'(x))^2 if h'(x) ≥ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.55b",
+    "text": "Assume that h'(x) < 0. Use the inequality h(t) ≥ h(x) + h'(x)(t - x) (which follows from convexity of h), to show that ∫^x_{-∞} e^{-h(t)} dt ≤ e^{-h(x)}/(-h'(x)). Use this inequality to verify that f''(x)f(x) ≤ (f'(x))^2 if h'(x) ≥ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.56a",
+    "text": "More log-concave densities. Show that the following densities are log-concave. [MO79, page 493] The gamma density, defined by f(x) = (α^λ/Γ(λ))x^{λ-1}e^{-αx}, with dom f = R_+. The parameters λ and α satisfy λ ≥ 1, α > 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.56b",
+    "text": "[MO79, page 306] The Dirichlet density f(x) = (Γ(1^T λ)/(Γ(λ_1)...Γ(λ_{n+1})))x_1^{λ_1-1}...x_n^{λ_n-1}(1 - ∑^n_{i=1} x_i)^{λ_{n+1}-1} with dom f = {x ∈ R^n_++ | 1^T x < 1}. The parameter λ satisfies λ ≽ 1.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.57",
+    "text": "Show that the function f(X) = X^{-1} is matrix convex on S^n_++.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.58",
+    "text": "Schur complement. Suppose X ∈ S^n partitioned as X = [[A, B], [B^T, C]], where A ∈ S^k. The Schur complement of X (with respect to A) is S = C - B^T A^{-1} B (see §A.5.5). Show that the Schur complement, viewed as function from S^n into S^{n-k}, is matrix concave on S^n_++.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.59",
+    "text": "Second-order conditions for K-convexity. Let K ⊆ R^m be a proper convex cone, with associated generalized inequality ≼_K. Show that a twice differentiable function f : R^n → R^m, with convex domain, is K-convex if and only if for all x ∈ dom f and all y ∈ R^n, ∑^n_{i,j=1} (∂^2 f(x)/∂x_i∂x_j) y_i y_j ≽_K 0, i.e., the second derivative is a K-nonnegative bilinear form. (Here ∂^2 f/∂x_i∂x_j ∈ R^m, with components ∂^2 f_k/∂x_i∂x_j, for k = 1, ..., m; see §A.4.1.)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.60a",
+    "text": "Sublevel sets and epigraph of K-convex functions. Let K ⊆ R^m be a proper convex cone with associated generalized inequality ≼_K, and let f : R^n → R^m. For α ∈ R^m, the α-sublevel set of f (with respect to ≼_K) is defined as C_α = {x ∈ R^n | f(x) ≼_K α}. The epigraph of f, with respect to ≼_K, is defined as the set epi_K f = {(x,t) ∈ R^{n+m} | f(x) ≼_K t}. Show the following: If f is K-convex, then its sublevel sets C_α are convex for all α.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "3.60b",
+    "text": "Sublevel sets and epigraph of K-convex functions. Let K ⊆ R^m be a proper convex cone with associated generalized inequality ≼_K, and let f : R^n → R^m. For α ∈ R^m, the α-sublevel set of f (with respect to ≼_K) is defined as C_α = {x ∈ R^n | f(x) ≼_K α}. The epigraph of f, with respect to ≼_K, is defined as the set epi_K f = {(x,t) ∈ R^{n+m} | f(x) ≼_K t}. Show the following: f is K-convex if and only if epi_K f is a convex set.",
+    "type": "proof-based"
+  }
+]
