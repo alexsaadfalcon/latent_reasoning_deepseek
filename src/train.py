@@ -19,8 +19,8 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
       with torch.set_grad_enabled(True):
         # Process the input through latent reasoning
         # embeds, all_masks, _ = latent_reasoning_forward(model, question, question_mask, reasoning_steps=30)
-        # embeds, all_masks, _ = latent_reasoning_forward_detach(model, question, question_mask)
-        embeds, all_masks, _ = latent_reasoning_forward_one_step_gradients(model, question, question_mask)
+        embeds, all_masks, _ = latent_reasoning_forward_detach(model, question, question_mask)
+        # embeds, all_masks, _ = latent_reasoning_forward_one_step_gradients(model, question, question_mask)
         ### CHECK THAT THIS IS FORMATTED CORRECTLY
         # print(question)
         # print(answer)
