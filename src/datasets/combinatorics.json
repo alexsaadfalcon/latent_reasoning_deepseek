@@ -1,0 +1,142 @@
+[
+  {
+    "exercise": "1.1",
+    "text": "Show by various methods that $\\binom{n}{k} = \\binom{n}{n-k}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.2",
+    "text": "There are $n$ people in a queue for the cinema (and, being in England, the order of people in the queue never changes). They are let into the cinema in $k$ batches, each batch consisting of one or more persons. In how many ways can the $k$ batches be chosen?",
+    "type": "answer-based",
+    "answer": "\\binom{n-1}{k-1}"
+  },
+  {
+    "exercise": "1.3",
+    "text": "How many solutions are there of the equation $x_1 + x_2 + \\cdots + x_k = n$ where each $x_i$ is a positive integer?",
+    "type": "answer-based",
+    "answer": "\\binom{n-1}{k-1}"
+  },
+  {
+    "exercise": "1.4a",
+    "text": "Use the answer to exercise 3 to find an alternative verification of the fact that the number of solutions of $x_1 + x_2 + \\cdots + x_k = n$ with each $x_i$ a non-negative integer is $\\binom{n+k-1}{k-1}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.4b",
+    "text": "By considering the number of $x_i$ which are zero in part (i) and by using the answer to exercise 3 for the positive $x_i$, show that $\\binom{n+k-1}{k-1} = \\binom{k}{0}\\binom{n-1}{k-1} + \\binom{k}{1}\\binom{n-1}{k-2} + \\binom{k}{2}\\binom{n-1}{k-3} + \\cdots + \\binom{k}{k-1}\\binom{n-1}{0}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.5",
+    "text": "In a row of $n$ seats in the doctor's waiting-room $k$ patients sit down in a particular order from left to right. They sit so that no two of them are in adjacent seats. In how many different ways could a suitable set of $k$ seats be chosen?",
+    "type": "answer-based",
+    "answer": "\\binom{n-k+1}{k}"
+  },
+  {
+    "exercise": "1.6",
+    "text": "By considering colouring $k$ out of $n$ items using one of two given colours for each item, show that $\\binom{n}{0}\\binom{n}{k} + \\binom{n}{1}\\binom{n}{k-1} + \\binom{n}{2}\\binom{n}{k-2} + \\cdots + \\binom{n}{k}\\binom{n}{0} = 2^k\\binom{n}{k}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.7a",
+    "text": "Show by using the expansion of $(1 + x)^{2n}$ that $\\binom{n}{0}^2 + \\binom{n}{1}^2 + \\binom{n}{2}^2 + \\cdots + \\binom{n}{n}^2 = \\binom{2n}{n}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.7b",
+    "text": "Show by considering the choice of $n$ people from a set of $2n$ which consists of $n$ men and $n$ women that $\\binom{n}{0}^2 + \\binom{n}{1}^2 + \\binom{n}{2}^2 + \\cdots + \\binom{n}{n}^2 = \\binom{2n}{n}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.7c",
+    "text": "Show by counting the number of routes in a suitable grid that $\\binom{n}{0}^2 + \\binom{n}{1}^2 + \\binom{n}{2}^2 + \\cdots + \\binom{n}{n}^2 = \\binom{2n}{n}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.8a",
+    "text": "There is a group of $2n$ people consisting of $n$ men and $n$ women from whom I wish to choose a subset, the only restriction being that the number of men chosen equals the number of women chosen. Use the result of exercise 7 to show that the subset may be chosen in $\\binom{2n}{n}$ ways.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.8b",
+    "text": "I now wish to choose the subset as in part (i) and then to choose a leader from the men in the subset and a leader from the women in the subset. Calculate the number of ways of choosing the subset first and then the leaders, and also calculate the number of ways of choosing the leaders first and then the remainder of the subset. Deduce that $1^2\\binom{n}{1}^2 + 2^2\\binom{n}{2}^2 + 3^2\\binom{n}{3}^2 + \\cdots + n^2\\binom{n}{n}^2 = n^2\\binom{2n-2}{n-1}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.8c",
+    "text": "Show by various methods that $\\binom{n}{1} + 2\\binom{n}{2} + 3\\binom{n}{3} + \\cdots + n\\binom{n}{n} = n2^{n-1}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.9a",
+    "text": "If you draw $n$ straight lines in the plane, no two of them being parallel and no three of them meeting at a point, how many intersection points will there be altogether?",
+    "type": "answer-based",
+    "answer": "\\binom{n}{2}"
+  },
+  {
+    "exercise": "1.9b",
+    "text": "If you draw $n$ straight lines in the plane consisting of $x_1$ parallel in one direction, $x_2$ parallel in a different direction, and $x_k$ parallel in another different direction, and with no three of the lines meeting at a point, show that the number of intersection points is $\\frac{1}{2}(n^2 - (x_1^2 + x_2^2 + \\cdots + x_k^2))$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.9c",
+    "text": "Draw a collection of 17 straight lines, no three meeting at a point, with a total of 101 intersection points.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "1.10a",
+    "text": "How many different rectangles can be seen in an $n \\times n$ grid? (One such rectangle is highlighted: of course the rectangles must be at least one box wide and deep, and squares are allowed.)",
+    "type": "answer-based",
+    "answer": "\\binom{n+1}{2}^2"
+  },
+  {
+    "exercise": "1.10b",
+    "text": "Use the answer to part (i) to show that the number of rectangles which lie in the top left-hand $r \\times r$ corner of the grid and which touch one of the two internal boundary lines of that corner (like the lower rectangle shown) is $r^3$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.10c",
+    "text": "Show that there are $1^3 + 2^3 + 3^3 + \\cdots + n^3$ rectangles in the grid and deduce that $1^3 + 2^3 + 3^3 + \\cdots + n^3 = (\\frac{1}{2}n(n+1))^2$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.10d",
+    "text": "How many of the $1^3 + 2^3 + 3^3 + \\cdots + n^3$ rectangles are squares?",
+    "type": "answer-based",
+    "answer": "n(n + 1)(2n + 1)/6"
+  },
+  {
+    "exercise": "1.11a",
+    "text": "Show that the sum of the numbers in the $r$th row of the array illustrated (with rows starting with 1, 1 2, 1 2 3, etc.) is $\\binom{r+1}{2}$ and hence express the grand total of numbers in the array as a single binomial coefficient.",
+    "type": "answer-based",
+    "answer": "\\binom{n+2}{3}"
+  },
+  {
+    "exercise": "1.11b",
+    "text": "By adding up the numbers in the array in a different way deduce that $1 \\cdot n + 2 \\cdot (n-1) + 3 \\cdot (n-2) + \\cdots + n \\cdot 1 = \\binom{n+2}{3}$.",
+    "type": "proof-based",
+  },
+  {
+    "exercise": "1.11c",
+    "text": "How many triangles oriented the same way up as ABC can be seen in a grid like the one shown but consisting of $n$ rows?",
+    "type": "answer-based",
+    "answer": "\\binom{n}{3}"
+  },
+  {
+    "exercise": "1.11d",
+    "text": "Express the number of triangles which can be seen the other way up as a sum of binomial coefficients.",
+    "type": "answer-based",
+    "answer": "n(n + 2)(2n - 1)/24 if n even and (n - 1)(n + 1)(2n + 3)/24 if n odd"
+  },
+  {
+    "exercise": "1.12",
+    "text": "If $n$ points are placed around the circumference of a circle and each pair of points is joined by a straight line, then the circle is divided into a number of regions. Show that, if no three of the lines meet inside the circle, then the number of regions will be $1 + \\binom{n}{2} + \\binom{n}{4}$.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "1.13",
+    "text": "At an ice-cream stall $m + n$ people are in a queue to buy one 50p ice-cream each. The stall-keeper has no change. Precisely $m$ of the people have just a 50p coin and the remaining $n$ people have just a £1 coin. By considering routes in a grid, find the probability that the stall-keeper always has enough change to serve the customers in turn.",
+    "type": "answer-based",
+    "answer": "1 - n/(m + 1) if m >= n and 0 if m < n"
+  }
+]
