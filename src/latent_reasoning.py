@@ -608,7 +608,7 @@ def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_
     # Run in inference mode
     with torch.no_grad():
         # Phase 1: Get latent embeddings using latent_reasoning_forward
-        all_embeddings, all_attention_mask, token_types = latent_reasoning_forward(
+        all_embeddings, all_attention_mask, token_types = latent_reasoning_forward_detach(
             model=model,
             input_ids=input_ids,
             attention_mask=attention_mask,
