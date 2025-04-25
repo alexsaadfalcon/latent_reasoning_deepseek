@@ -16,12 +16,17 @@ def format_answer(answer):
 
 def format_prompt(question):
   prompt = '<｜User｜>Solve the following math problem step-by-step. Think briefly and provide a numeric answer.\n' \
-           '{}\n<｜Assistant｜><think>\n'
+           '{}\n<｜Assistant｜>\n<think>\n'
   return prompt.format(question)
 
 def format_prompt_convex(question):
-  prompt = 'Solve the following theoretical math problem step-by-step. Think briefly and provide a simple answer in the form of a statement or equation.\n' \
-           '{}\n<think>\n'
+  prompt = '<｜User｜>Solve the following theoretical math problem step-by-step. Think briefly and provide a simple answer in the form of a statement or equation.\n' \
+           '{}\n<｜Assistant｜>\n<think>\n'
+  return prompt.format(question)
+
+def format_prompt_combo(question):
+  prompt = 'Solve the following theoretical combinatorics step-by-step. Think briefly and provide a simple answer in the form of a statement or equation with LaTeX formatting.\n' \
+           '{}\n<｜Assistant｜>\n<think>\n'
   return prompt.format(question)
 
 def fill_ignore_label(l, c):

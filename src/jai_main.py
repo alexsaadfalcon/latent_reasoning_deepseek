@@ -1,11 +1,11 @@
 import os
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, get_linear_schedule_with_warmup
-from textbook_data import get_convex_latent_dataloader
+from textbook_data import get_combo_latent_dataloader
 from lora import apply_lora
 from train import train_latent
 from latent_reasoning import generate_with_latent_reasoning, generate_with_latent_reasoning_v2
-from utils import format_prompt, format_answer
+from utils import format_prompt_combo, format_answer
 from experiments import get_model_predictions
 
 def main():
@@ -23,6 +23,9 @@ def main():
     newline_id = tokenizer.encode('\n', add_special_tokens=False)
     answer_pad = len(tokenizer.encode(format_answer(''), add_special_tokens=False))
     eos_id = tokenizer.encode('<｜end▁of▁sentence｜>', add_special_tokens=False)
+    formatted_prompt_tokens = tokenizer.encode(format_prompt_combo(''), add_special_tokens=False)
+    # make sure user and assistant tokens in prompt
+    assert 151644 in formatted_prompt_tokens and 151645 in formatted_prompt_tokens
     print('start/stop think ids', start_think_id, stop_think_id, newline_id)
     print('number of answer pad tokens', answer_pad)
     print('eos tokens', eos_id)
@@ -38,7 +41,7 @@ def main():
     # Set up data
     print("Loading GSM8K dataset")
     batch_size = 4
-    dataloader = get_convex_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
+    dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
     
     # Set up optimizer and scheduler
     learning_rate = 1e-3
@@ -58,7 +61,7 @@ def main():
     )
     
     load_model = None
-    # load_model = 'finetuned_latent_convex_30_0.bin'
+    # load_model = 'finetuned_latent_combo_30_0.bin'
     if load_model is None:
         # Train the model
         print("Starting training")
@@ -70,7 +73,7 @@ def main():
             batch_size=batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
             num_epochs=num_epochs,
-            prefix=f'convex_{reasoning_steps}',
+            prefix=f'combo_{reasoning_steps}',
         )
     else:
         model.load_state_dict(torch.load(load_model))

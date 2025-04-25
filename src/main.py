@@ -45,7 +45,7 @@ def main():
     dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     # Set up optimizer and scheduler
-    learning_rate = 1e-3
+    learning_rate = 1e-5
     num_epochs = 2
     gradient_accumulation_steps = 16
     
