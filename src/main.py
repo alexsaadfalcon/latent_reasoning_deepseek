@@ -22,6 +22,12 @@ def main():
     newline_id = tokenizer.encode('\n', add_special_tokens=False)
     answer_pad = len(tokenizer.encode(format_answer(''), add_special_tokens=False))
     eos_id = tokenizer.encode('<｜end▁of▁sentence｜>', add_special_tokens=False)
+    user_id = tokenizer.encode('<｜User｜>', add_special_tokens=False)
+    assistant_id = tokenizer.encode('<｜Assistant｜>', add_special_tokens=False)
+    formatted_prompt_tokens = tokenizer.encode(format_prompt(''), add_special_tokens=False)
+    # make sure user and assistant tokens in prompt
+    assert 151644 in formatted_prompt_tokens and 151645 in formatted_prompt_tokens
+    print('User and Assistant tokens', user_id, assistant_id)
     print('start/stop think ids', start_think_id, stop_think_id, newline_id)
     print('number of answer pad tokens', answer_pad)
     print('eos tokens', eos_id)
@@ -32,7 +38,7 @@ def main():
     print("Applying LoRA to the model")
     lora_dim = 32
     apply_lora(model, lora_dim=lora_dim)
-    
+
     # Set up data
     print("Loading GSM8K dataset")
     batch_size = 4

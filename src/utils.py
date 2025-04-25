@@ -15,8 +15,8 @@ def format_answer(answer):
   return f'\n</think>\nThe correct answer is: {answer}<｜end▁of▁sentence｜>'
 
 def format_prompt(question):
-  prompt = 'Solve the following math problem step-by-step. Think briefly and provide a numeric answer.\n' \
-           '{}\n<think>\n'
+  prompt = '<｜User｜>Solve the following math problem step-by-step. Think briefly and provide a numeric answer.\n' \
+           '{}\n<｜Assistant｜><think>\n'
   return prompt.format(question)
 
 def format_prompt_convex(question):
