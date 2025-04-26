@@ -36,6 +36,7 @@ def run_experiment_1(slurm_args):
         
         cmd = [
             "cd", job_dir, "&&",
+            "conda activate coconut &&",
             "srun",
             *[f"{k}={v}" if v else k for k,v in slurm_args.items()],
             "python", "main_job.py",
@@ -74,6 +75,7 @@ def run_experiment_2(slurm_args):
         
         cmd = [
             "cd", job_dir, "&&",
+            "conda activate coconut &&",
             "srun",
             *[f"{k}={v}" if v else k for k,v in slurm_args.items()],
             "python", "main_job.py",
@@ -112,6 +114,7 @@ def run_experiment_3(slurm_args):
         
         cmd = [
             "cd", job_dir, "&&",
+            "conda activate coconut &&",
             "srun",
             *[f"{k}={v}" if v else k for k,v in slurm_args.items()],
             "python", "main_job.py",
