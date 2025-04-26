@@ -170,6 +170,7 @@ def main():
         "--gres": "gpu:A100:1",
         "--time": "24:00:00",
         "--mem": "16G",
+        "-q": 'inferno',
         "--cpus-per-task": "4"
     }
     
