@@ -45,10 +45,11 @@ def main():
     dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     # Set up optimizer and scheduler
-    learning_rate = 1e-5
+    learning_rate = 1e-3
     num_epochs = 2
     gradient_accumulation_steps = 16
-    
+    reasoning_steps = 100
+
     optimizer = torch.optim.AdamW(
         filter(lambda p: p.requires_grad, model.parameters()),
         lr=learning_rate
@@ -73,6 +74,7 @@ def main():
             dataloader=dataloader,
             batch_size=batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
+            reasoning_steps=reasoning_steps,
             num_epochs=num_epochs
         )
     else:
@@ -93,7 +95,7 @@ def main():
             model=model,
             tokenizer=tokenizer,
             prompt=example,
-            reasoning_steps=30,
+            reasoning_steps=reasoning_steps,
             max_new_tokens=100
         )
         print(f"\nInput: {example}\nOutput: {result}\n")

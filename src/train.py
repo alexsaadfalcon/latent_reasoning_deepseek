@@ -7,7 +7,7 @@ from latent_reasoning import latent_reasoning_forward, latent_plus_answer_loss, 
   latent_reasoning_forward_detach, latent_reasoning_forward_one_step_gradients
 
 def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
-                 gradient_accumulation_steps=16, num_epochs=2, prefix=None):
+                 gradient_accumulation_steps=16, num_epochs=2, reasoning_steps=30, prefix=None):
   if os.path.exists("loss.txt"):
     os.remove("loss.txt")
 
@@ -19,7 +19,7 @@ def train_latent(model, optimizer, scheduler, dataloader, batch_size=4,
       with torch.set_grad_enabled(True):
         # Process the input through latent reasoning
         # embeds, all_masks, _ = latent_reasoning_forward(model, question, question_mask, reasoning_steps=30)
-        embeds, all_masks, _ = latent_reasoning_forward_detach(model, question, question_mask)
+        embeds, all_masks, _ = latent_reasoning_forward_detach(model, question, question_mask, reasoning_steps=reasoning_steps)
         # embeds, all_masks, _ = latent_reasoning_forward_one_step_gradients(model, question, question_mask)
         ### CHECK THAT THIS IS FORMATTED CORRECTLY
         # print(question)
