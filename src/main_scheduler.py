@@ -167,7 +167,8 @@ def main():
     # Slurm arguments
     slurm_args = {
         "--account": "gts-jromberg3",
-        "--gpus": "1",
+        "--partition": "gpu",
+        "--gres": "gpu:A100:1",
         "--time": "24:00:00",
         "--mem": "16G",
         "--cpus-per-task": "4"
