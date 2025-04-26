@@ -36,14 +36,15 @@ def run_experiment_1(slurm_args):
         
         cmd = [
             "cd", job_dir, "&&",
-            "conda activate coconut &&",
             "srun",
+            "--export=ALL",
             *[f"{k}={v}" if v else k for k,v in slurm_args.items()],
-            "python", "main_job.py",
+            "bash", "-c", "'source $(conda info --base)/etc/profile.d/conda.sh && conda activate coconut && python main_job.py",
             "--learning_rate", str(learning_rate),
             "--num_epochs", "10",
             "--reasoning_steps", str(steps),
-            "--lora_dim", str(lora_dim)
+            "--lora_dim", str(lora_dim),
+            "'"
         ]
         
         process = subprocess.Popen(" ".join(cmd), shell=True)
@@ -75,14 +76,15 @@ def run_experiment_2(slurm_args):
         
         cmd = [
             "cd", job_dir, "&&",
-            "conda activate coconut &&",
             "srun",
+            "--export=ALL",
             *[f"{k}={v}" if v else k for k,v in slurm_args.items()],
-            "python", "main_job.py",
+            "bash", "-c", "'source $(conda info --base)/etc/profile.d/conda.sh && conda activate coconut && python main_job.py",
             "--learning_rate", str(lr),
             "--num_epochs", "10", 
             "--reasoning_steps", str(reasoning_steps),
-            "--lora_dim", str(lora_dim)
+            "--lora_dim", str(lora_dim),
+            "'"
         ]
         
         process = subprocess.Popen(" ".join(cmd), shell=True)
@@ -114,14 +116,15 @@ def run_experiment_3(slurm_args):
         
         cmd = [
             "cd", job_dir, "&&",
-            "conda activate coconut &&",
             "srun",
+            "--export=ALL",
             *[f"{k}={v}" if v else k for k,v in slurm_args.items()],
-            "python", "main_job.py",
+            "bash", "-c", "'source $(conda info --base)/etc/profile.d/conda.sh && conda activate coconut && python main_job.py",
             "--learning_rate", str(learning_rate),
             "--num_epochs", "10",
             "--reasoning_steps", str(reasoning_steps),
-            "--lora_dim", str(dim)
+            "--lora_dim", str(dim),
+            "'"
         ]
         
         process = subprocess.Popen(" ".join(cmd), shell=True)
