@@ -16,10 +16,6 @@ def setup_job_directory(exp_name):
     
     # Create fresh directory
     os.makedirs(job_dir)
-    
-    # Copy all python files from current directory
-    for py_file in glob.glob("*.py"):
-        shutil.copy2(py_file, job_dir)
 
 def run_experiment_1(slurm_args):
     """Sweep over reasoning steps with fixed learning rate and lora dim"""
@@ -33,6 +29,10 @@ def run_experiment_1(slurm_args):
     for job_id, steps in enumerate(reasoning_steps_values):
         job_dir = f"jobs/exp1/job{job_id}"
         os.makedirs(job_dir, exist_ok=True)
+        
+        # Copy all python files to job directory
+        for py_file in glob.glob("*.py"):
+            shutil.copy2(py_file, job_dir)
         
         cmd = [
             "cd", job_dir, "&&",
@@ -68,6 +68,10 @@ def run_experiment_2(slurm_args):
         job_dir = f"jobs/exp2/job{job_id}"
         os.makedirs(job_dir, exist_ok=True)
         
+        # Copy all python files to job directory
+        for py_file in glob.glob("*.py"):
+            shutil.copy2(py_file, job_dir)
+        
         cmd = [
             "cd", job_dir, "&&",
             "srun",
@@ -101,6 +105,10 @@ def run_experiment_3(slurm_args):
     for job_id, dim in enumerate(lora_dims):
         job_dir = f"jobs/exp3/job{job_id}"
         os.makedirs(job_dir, exist_ok=True)
+        
+        # Copy all python files to job directory
+        for py_file in glob.glob("*.py"):
+            shutil.copy2(py_file, job_dir)
         
         cmd = [
             "cd", job_dir, "&&",
