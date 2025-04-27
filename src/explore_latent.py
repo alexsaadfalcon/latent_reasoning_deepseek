@@ -143,8 +143,9 @@ if __name__ == '__main__':
       plt.ylabel("Latent Step") 
     
     with torch.no_grad():
-      last_latent = [latents[i, -1, :] for i in range(len(latents))]
-      last_latent = torch.cat(last_latent, dim=0)
+      last_inds = [q_lens[i] + reasoning_steps - 1 for i in range(len(latents))]
+      last_latent = [latents[i, last_inds[i], :] for i in range(len(latents))]
+      last_latent = torch.stack(last_latent, dim=0)
       norm = torch.norm(last_latent, dim=1, keepdim=True)
       norm_last_latent = last_latent / norm
       last_latent_cosine_sim = torch.mm(norm_last_latent, norm_last_latent.t())
