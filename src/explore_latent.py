@@ -130,10 +130,17 @@ if __name__ == '__main__':
 
     latent = latents[0]
     for i in range(latent.shape[0]):
-        coef = matching_pursuit(latent[i].detach().numpy(), emb.T)
-        plt.figure()
-        plt.stem(coef)
-        plt.show()
+        coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
+        # compute the top tokens according to coef
+        # Get indices of top 5 nonzero coefficients by magnitude
+        top_indices = np.abs(coef).argsort()[-5:][::-1]
+        top_tokens = [tokenizer.decode([j]) for j in top_indices]
+        print('top tokens:', top_tokens)
+        # plt.figure()
+        # plt.suptitle(f'{top_tokens}')
+        # plt.stem(coef)
+        # plt.show()
+    input()
 
     for i in range(5):
       attention_ave = torch.mean(attentions[i:i+1], dim=(0, 1, 2)).log10()
