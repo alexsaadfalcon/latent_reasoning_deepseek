@@ -79,7 +79,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
 def matching_pursuit(latents, embedding, n_nonzero=1):
     from sklearn.linear_model import OrthogonalMatchingPursuit
     omp = OrthogonalMatchingPursuit(n_nonzero_coefs=n_nonzero)
-    omp.fit(embedding.numpy(), latents.numpy())
+    omp.fit(embedding, latents)
     coef = omp.coef_
     return coef
 
@@ -127,6 +127,13 @@ if __name__ == '__main__':
         emb = np.loadtxt('emb.txt')
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
+
+    latent = latents[0]
+    for i in range(latent.shape[0]):
+        coef = matching_pursuit(latent[i].detach().numpy(), emb.T)
+        plt.figure()
+        plt.stem(coef)
+        plt.show()
 
     for i in range(5):
       attention_ave = torch.mean(attentions[i:i+1], dim=(0, 1, 2)).log10()
