@@ -133,13 +133,13 @@ if __name__ == '__main__':
     print(q_lens, a_lens)
 
     for l, latent in enumerate(latents):
+        print('question', responses[l])
         for i in range(q_lens[0]-1, q_lens[0]+reasoning_steps):
             coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
             # compute the top tokens according to coef
             # Get indices of top 5 nonzero coefficients by magnitude
             top_indices = np.abs(coef).argsort()[-5:][::-1]
             top_tokens = [tokenizer.decode([j]) for j in top_indices]
-            print('question', responses[l])
             print('top tokens:', top_tokens)
             # plt.figure()
             # plt.suptitle(f'{top_tokens}')
