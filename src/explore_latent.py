@@ -13,6 +13,8 @@ from utils import *
 def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0.0):
     model.eval()
     attentions = []
+    latents = []
+    q_lens, a_lens = [], []
 
     with torch.no_grad():
         for question, question_mask, answer, answer_mask in tqdm(dataloader):
@@ -25,7 +27,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
             batch_size = question.size(0)
             
             # Generate predictions in batch mode
-            attention = generate_with_latent_reasoning_batch(
+            attention, latent = generate_with_latent_reasoning_batch(
                 model=model,
                 tokenizer=tokenizer,
                 input_ids=question,
@@ -37,7 +39,9 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
             )
             attention = torch.stack(attention, dim=1)
             attentions.append(attention)
-            break
+            latents.append(latent)
+            q_lens.append(question.shape[1])
+            a_lens.append(answer.shape[1])
     
     attentions_ = []
     # attentions have shape (batch, layer, head, seq_len, seq_len)
@@ -52,8 +56,22 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
         att_pad[:, :, :, :seq_len, :seq_len] = att
         attentions_.append(att_pad)
     attentions = attentions_
+    attentions = torch.cat(attentions, dim=0)
+    
+    latents_ = []
+    # latents have shape (batch, seq_len, embedding_dim)
+    # zero pad all latents to have the same shape in dimension 1
+    emb_dim = latents[0].shape[2]
+    lat_shape = (1, longest_seq, emb_dim)
+    for lat in latents:
+        lat_pad = torch.zeros(lat_shape)
+        seq_len = lat.shape[1]
+        lat_pad[:, :seq_len, :] = lat
+        latents_.append(lat_pad)
+    latents = latents_
+    latents = torch.cat(latents, dim=0)
 
-    return torch.cat(attentions, dim=0)
+    return attentions, latents, q_lens, a_lens
 
 
 if __name__ == '__main__':
@@ -71,7 +89,9 @@ if __name__ == '__main__':
     temp = 0.1
 
     dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
-    attentions = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
+    attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
+    print(attentions.shape, latents.shape)
+    print(q_lens, a_lens)
 
     attention_ave = torch.mean(attentions, dim=(0, 1, 2)).log10()
     plt.figure()
