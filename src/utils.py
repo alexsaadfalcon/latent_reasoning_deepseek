@@ -1,5 +1,6 @@
 import torch
 import json
+from torch.utils.data import IterableDataset
 
 def load_json(fname):
   with open(fname, 'r', encoding='utf-8') as file:
@@ -125,4 +126,15 @@ def prepare_latent_reasoning_batch(questions, answers, latent_steps, tokenizer, 
   
   return input_ids, attention_mask, labels
 
+
+class TrimmedDataset(IterableDataset):
+  def __init__(self, dataloader, n_trim):
+    self.dataloader = dataloader
+    self.n_trim = n_trim
+
+  def __iter__(self):
+    for idx, batch in enumerate(self.dataloader):
+      if idx >= self.n_trim:
+        break
+      yield batch
 
