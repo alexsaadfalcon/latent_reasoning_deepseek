@@ -587,7 +587,7 @@ def generate_with_latent_reasoning_v2(model, tokenizer, prompt, reasoning_steps=
     return visible_text
 
 def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_mask,
-                                         reasoning_steps=5, max_new_tokens=50, temp=0.0, output_attention=False):
+                                         reasoning_steps=5, max_new_tokens=50, temp=0.0, output_attentions=False):
     """
     Generate text with latent reasoning steps in batch mode, returning only the token tensors.
     
@@ -676,11 +676,12 @@ def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_
             # Get the next logits for the next iteration
             outputs = model(
                 inputs_embeds=all_embeddings,
-                attention_mask=all_attention_mask
+                attention_mask=all_attention_mask,
+                output_attentions=True,
             )
             next_token_logits = outputs.logits[:, -1, :]
         
-        if output_attention:
+        if output_attentions:
             return outputs.attentions
     
     # Concatenate the input, answer format, and generated tokens
