@@ -81,11 +81,6 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name)
-    model.to(device)
-
-    lora_dim = 32
-    apply_lora(model, lora_dim=lora_dim)
 
     reasoning_steps = 30
     temp = 0.1
@@ -103,11 +98,15 @@ if __name__ == '__main__':
         dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256, test=True)
     else:
         raise ValueError()
-
-    model.load_state_dict(torch.load(model_name))
-    model.eval()
     
     if not os.path.exists(att_name):
+        model = AutoModelForCausalLM.from_pretrained(model_name)
+        model.to(device)
+
+        lora_dim = 32
+        apply_lora(model, lora_dim=lora_dim)
+        model.load_state_dict(torch.load(model_name))
+        model.eval()
         attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
         pickle.dump((attentions, latents, q_lens, a_lens), open(att_name, 'wb'))
     else:
