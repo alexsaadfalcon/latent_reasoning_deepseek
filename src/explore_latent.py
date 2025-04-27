@@ -41,7 +41,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
                 temp=temp,
                 output_attentions=True,
             )
-            full_tokens.append(full_tokens_)
+            full_tokens.append(full_tokens_[0])
             attention = torch.stack(attention, dim=1)
             attentions.append(attention)
             latents.append(latent)
@@ -76,7 +76,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
     latents = latents_
     latents = torch.cat(latents, dim=0)
 
-    responses = [tokenizer.decode(_full_tokens) for _full_tokens in full_tokens]
+    responses = [tokenizer.decode(_full_tokens, skip_special_tokens=True) for _full_tokens in full_tokens]
 
     return responses, attentions, latents, q_lens, a_lens
 
@@ -132,13 +132,14 @@ if __name__ == '__main__':
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
-    for latent in latents:
+    for l, latent in enumerate(latents):
         for i in range(q_lens[0]-1, q_lens[0]+reasoning_steps):
             coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
             # compute the top tokens according to coef
             # Get indices of top 5 nonzero coefficients by magnitude
             top_indices = np.abs(coef).argsort()[-5:][::-1]
             top_tokens = [tokenizer.decode([j]) for j in top_indices]
+            print('question', responses[l])
             print('top tokens:', top_tokens)
             # plt.figure()
             # plt.suptitle(f'{top_tokens}')
