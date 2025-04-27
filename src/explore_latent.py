@@ -90,18 +90,34 @@ if __name__ == '__main__':
     reasoning_steps = 30
     temp = 0.1
 
-    dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
-    if not os.path.exists('attention.pkl'):
-        attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
-        pickle.dump((attentions, latents, q_lens, a_lens), open('attention.pkl', 'wb'))
+
+    dataset = 'gsm8k'
+    if dataset == 'gsm8k':
+        att_name = 'attention_gsm8k.pkl'
+        model_name = 'finetuned_latent_5.bin'
+        dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
+    elif dataset == 'combinatorics':
+        att_name = 'attention_combo.pkl'
+        model_name = 'finetuned_latent_combo_30_0.bin'
+        dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
     else:
-        attentions, latents, q_lens, a_lens = pickle.load(open('attention.pkl', 'rb'))
+        raise ValueError()
+
+    model.load_state_dict(torch.load(model_name))
+    model.eval()
+    
+    if not os.path.exists(att_name):
+        attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
+        pickle.dump((attentions, latents, q_lens, a_lens), open(att_name, 'wb'))
+    else:
+        attentions, latents, q_lens, a_lens = pickle.load(open(att_name, 'rb'))
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
-    attention_ave = torch.mean(attentions, dim=(0, 1, 2)).log10()
-    plt.figure()
-    plt.imshow(attention_ave)
-    plt.colorbar()
+    for i in range(attentions.shape[0]):
+      attention_ave = torch.mean(attentions[i:i+1], dim=(0, 1, 2)).log10()
+      plt.figure()
+      plt.imshow(attention_ave)
+      plt.colorbar()
     plt.show()
     
