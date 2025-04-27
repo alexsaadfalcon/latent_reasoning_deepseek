@@ -45,7 +45,7 @@ def main():
     
     # Set up optimizer and scheduler
     learning_rate = 1e-5
-    num_epochs = 25
+    num_epochs = 100
     gradient_accumulation_steps = 2
     
     optimizer = torch.optim.AdamW(
@@ -83,7 +83,7 @@ def main():
     
     # Test latent reasoning
     print("Testing latent reasoning")
-    preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps, temp=0.6)
+    preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps, temp=0.1)
     for i, pred in enumerate(preds):
         print()
         print(f'Question {i}:', pred[0])

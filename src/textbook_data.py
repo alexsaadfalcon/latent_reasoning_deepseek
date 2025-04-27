@@ -62,9 +62,9 @@ def get_combo(test=False):
     dataset_.append(qa)
   dataset = dataset_
   if not test:
-    dataset = dataset[2:]
+    dataset = dataset[:8]
   else:
-    dataset = dataset[:2]
+    dataset = dataset[8:]
   # print(dataset[0])
   return dataset
 
