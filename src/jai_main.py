@@ -35,7 +35,7 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    lora_dim = 32
+    lora_dim = 16
     apply_lora(model, lora_dim=lora_dim)
     
     # Set up data
@@ -44,8 +44,8 @@ def main():
     dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
     
     # Set up optimizer and scheduler
-    learning_rate = 1e-4
-    num_epochs = 50
+    learning_rate = 1e-5
+    num_epochs = 25
     gradient_accumulation_steps = 2
     
     optimizer = torch.optim.AdamW(
@@ -62,7 +62,7 @@ def main():
     )
     
     load_model = None
-    load_model = 'finetuned_latent_combo_30_0.bin'
+    # load_model = 'finetuned_latent_combo_30_0.bin'
     if load_model is None:
         # Train the model
         print("Starting training")
