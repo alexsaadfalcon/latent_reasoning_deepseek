@@ -6,6 +6,7 @@ from lora import apply_lora
 from train import train_latent
 from latent_reasoning import generate_with_latent_reasoning, generate_with_latent_reasoning_v2
 from utils import format_prompt, format_answer
+from experiments import evaluate_accuracy
 
 def main():
     # Set device
@@ -36,7 +37,7 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    lora_dim = 32
+    lora_dim = 64
     apply_lora(model, lora_dim=lora_dim)
 
     # Set up data
@@ -45,10 +46,10 @@ def main():
     dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128)
     
     # Set up optimizer and scheduler
-    learning_rate = 1e-3
+    learning_rate = 1e-5
     num_epochs = 10
     gradient_accumulation_steps = 16
-    reasoning_steps = 20
+    reasoning_steps = 10
 
     optimizer = torch.optim.AdamW(
         filter(lambda p: p.requires_grad, model.parameters()),
@@ -56,6 +57,7 @@ def main():
     )
     
     num_update_steps = len(dataloader) // gradient_accumulation_steps * num_epochs
+    print('number of update steps', num_update_steps)
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
         num_warmup_steps=int(0.1 * num_update_steps),
@@ -99,6 +101,10 @@ def main():
             max_new_tokens=100
         )
         print(f"\nInput: {example}\nOutput: {result}\n")
+    
+    dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128, test=True)
+    acc = evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=reasoning_steps)
+    print('final accuracy', acc)
 
 if __name__ == "__main__":
     main()

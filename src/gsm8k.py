@@ -9,7 +9,7 @@ def get_gsm8k(test=False):
     dataset = dataset["train"]
   else:
     dataset = dataset["test"]
-  dataset = dataset.select(range(1000))
+  # dataset = dataset.select(range(1000))
   return dataset
 
 def format_gsm8k_example(example):
