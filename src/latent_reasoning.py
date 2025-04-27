@@ -680,9 +680,6 @@ def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_
                 output_attentions=True,
             )
             next_token_logits = outputs.logits[:, -1, :]
-        
-        if output_attentions:
-            return outputs.attentions, all_embeddings
     
     # Concatenate the input, answer format, and generated tokens
     full_tokens = torch.cat([
@@ -691,6 +688,9 @@ def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_
         generated_ids[:, :i+1]  # Only include the tokens we've actually generated
     ], dim=1)
     
+        
+    if output_attentions:
+        return full_tokens, outputs.attentions, all_embeddings
     return full_tokens
 
 # Example usage

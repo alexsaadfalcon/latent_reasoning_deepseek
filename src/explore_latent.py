@@ -15,6 +15,7 @@ from utils import *
 
 def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0.0):
     model.eval()
+    full_tokens = []
     attentions = []
     latents = []
     q_lens, a_lens = [], []
@@ -30,7 +31,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
             batch_size = question.size(0)
             
             # Generate predictions in batch mode
-            attention, latent = generate_with_latent_reasoning_batch(
+            full_tokens_, attention, latent = generate_with_latent_reasoning_batch(
                 model=model,
                 tokenizer=tokenizer,
                 input_ids=question,
@@ -40,6 +41,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
                 temp=temp,
                 output_attentions=True,
             )
+            full_tokens.append(full_tokens_)
             attention = torch.stack(attention, dim=1)
             attentions.append(attention)
             latents.append(latent)
@@ -74,7 +76,9 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
     latents = latents_
     latents = torch.cat(latents, dim=0)
 
-    return attentions, latents, q_lens, a_lens
+    responses = [tokenizer.decode(_full_tokens) for _full_tokens in full_tokens]
+
+    return responses, attentions, latents, q_lens, a_lens
 
 def matching_pursuit(latents, embedding, n_nonzero=1):
     from sklearn.linear_model import OrthogonalMatchingPursuit
@@ -97,12 +101,12 @@ if __name__ == '__main__':
     dataset = 'gsm8k'
     if dataset == 'gsm8k':
         att_name = 'attention_gsm8k.pkl'
-        model_name = 'finetuned_latent_5.bin'
+        model_fname = 'finetuned_latent_5.bin'
         dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128, test=True)
         dataloader = TrimmedDataset(dataloader, 40)
     elif dataset == 'combinatorics':
         att_name = 'attention_combo.pkl'
-        model_name = 'finetuned_latent_combo_30_0.bin'
+        model_fname = 'finetuned_latent_combo_30_0.bin'
         dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256, test=True)
     else:
         raise ValueError()
@@ -118,28 +122,28 @@ if __name__ == '__main__':
 
         lora_dim = 32
         apply_lora(model, lora_dim=lora_dim)
-        model.load_state_dict(torch.load(model_name))
+        model.load_state_dict(torch.load(model_fname))
         model.eval()
-        attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
-        pickle.dump((attentions, latents, q_lens, a_lens), open(att_name, 'wb'))
+        responses, attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
+        pickle.dump((responses, attentions, latents, q_lens, a_lens), open(att_name, 'wb'))
     else:
-        attentions, latents, q_lens, a_lens = pickle.load(open(att_name, 'rb'))
+        responses, attentions, latents, q_lens, a_lens = pickle.load(open(att_name, 'rb'))
         emb = np.loadtxt('emb.txt')
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
-    latent = latents[0]
-    for i in range(latent.shape[0]):
-        coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
-        # compute the top tokens according to coef
-        # Get indices of top 5 nonzero coefficients by magnitude
-        top_indices = np.abs(coef).argsort()[-5:][::-1]
-        top_tokens = [tokenizer.decode([j]) for j in top_indices]
-        print('top tokens:', top_tokens)
-        # plt.figure()
-        # plt.suptitle(f'{top_tokens}')
-        # plt.stem(coef)
-        # plt.show()
+    for latent in latents:
+        for i in range(q_lens[0]-1, q_lens[0]+reasoning_steps):
+            coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
+            # compute the top tokens according to coef
+            # Get indices of top 5 nonzero coefficients by magnitude
+            top_indices = np.abs(coef).argsort()[-5:][::-1]
+            top_tokens = [tokenizer.decode([j]) for j in top_indices]
+            print('top tokens:', top_tokens)
+            # plt.figure()
+            # plt.suptitle(f'{top_tokens}')
+            # plt.stem(coef)
+            # plt.show()
     input()
 
     for i in range(5):
