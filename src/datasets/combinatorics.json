@@ -114,7 +114,7 @@
   {
     "exercise": "1.11b",
     "text": "By adding up the numbers in the array in a different way deduce that $1 \\cdot n + 2 \\cdot (n-1) + 3 \\cdot (n-2) + \\cdots + n \\cdot 1 = \\binom{n+2}{3}$.",
-    "type": "proof-based",
+    "type": "proof-based"
   },
   {
     "exercise": "1.11c",

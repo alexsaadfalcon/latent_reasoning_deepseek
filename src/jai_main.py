@@ -44,9 +44,9 @@ def main():
     dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
     
     # Set up optimizer and scheduler
-    learning_rate = 1e-3
-    num_epochs = 200
-    gradient_accumulation_steps = 16
+    learning_rate = 1e-4
+    num_epochs = 50
+    gradient_accumulation_steps = 2
     
     optimizer = torch.optim.AdamW(
         filter(lambda p: p.requires_grad, model.parameters()),
@@ -54,6 +54,7 @@ def main():
     )
     
     num_update_steps = len(dataloader) // gradient_accumulation_steps * num_epochs
+    print('number of update steps', num_update_steps)
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
         num_warmup_steps=int(0.1 * num_update_steps),
@@ -61,7 +62,7 @@ def main():
     )
     
     load_model = None
-    # load_model = 'finetuned_latent_combo_30_0.bin'
+    load_model = 'finetuned_latent_combo_30_0.bin'
     if load_model is None:
         # Train the model
         print("Starting training")
@@ -81,6 +82,17 @@ def main():
     model.eval()
     
     # Test latent reasoning
+    print("Testing latent reasoning")
+    preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps, temp=0.6)
+    for i, pred in enumerate(preds):
+        print()
+        print(f'Question {i}:', pred[0])
+        print()
+        print(f'Correct Answer {i}:', pred[1])
+        print()
+        print(f'Answer {i}:', pred[2])
+    
+    dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256, test=True)
     print("Testing latent reasoning")
     preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps, temp=0.6)
     for i, pred in enumerate(preds):

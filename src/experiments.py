@@ -137,7 +137,7 @@ def main():
     dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128, test=True)
     
     load_model = None
-    load_model = 'finetuned_latent_3.bin'
+    load_model = 'finetuned_latent_5.bin'
     model.load_state_dict(torch.load(load_model))
     model.eval()
 

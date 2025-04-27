@@ -25,7 +25,7 @@ def format_prompt_convex(question):
   return prompt.format(question)
 
 def format_prompt_combo(question):
-  prompt = 'Solve the following theoretical combinatorics step-by-step. Think briefly and provide a simple answer in the form of a statement or equation with LaTeX formatting.\n' \
+  prompt = '<｜User｜>Solve the following theoretical combinatorics step-by-step. Think briefly and provide a simple answer in the form of a statement or equation with LaTeX formatting.\n' \
            '{}\n<｜Assistant｜>\n<think>\n'
   return prompt.format(question)
 

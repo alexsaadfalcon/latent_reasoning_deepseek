@@ -46,9 +46,9 @@ def main():
     
     # Set up optimizer and scheduler
     learning_rate = 1e-3
-    num_epochs = 2
+    num_epochs = 10
     gradient_accumulation_steps = 16
-    reasoning_steps = 100
+    reasoning_steps = 20
 
     optimizer = torch.optim.AdamW(
         filter(lambda p: p.requires_grad, model.parameters()),
