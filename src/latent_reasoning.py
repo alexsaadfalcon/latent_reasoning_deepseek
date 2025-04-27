@@ -646,8 +646,16 @@ def generate_with_latent_reasoning_batch(model, tokenizer, input_ids, attention_
         
         # Start generating tokens
         for i in range(max_new_tokens):
-            # Get the next token
-            next_token_id = torch.argmax(next_token_logits, dim=-1)
+            # Apply temperature to logits
+            if temp == 0:
+                next_token_id = torch.argmax(next_token_logits, dim=-1)
+            else:
+                # Scale logits by temperature
+                next_token_logits = next_token_logits / temp
+                # Sample from the distribution
+                probs = torch.nn.functional.softmax(next_token_logits, dim=-1)
+                next_token_id = torch.multinomial(probs, num_samples=1).squeeze(-1)
+            
             generated_ids[:, i] = next_token_id
             
             # Mark finished samples
