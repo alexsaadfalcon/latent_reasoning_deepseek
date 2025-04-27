@@ -35,7 +35,7 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    lora_dim = 4
+    lora_dim = 32
     apply_lora(model, lora_dim=lora_dim)
     
     # Set up data
@@ -94,7 +94,7 @@ def main():
     
     dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256, test=True)
     print("Testing latent reasoning")
-    preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps, temp=0.6)
+    preds = get_model_predictions(model, tokenizer, dataloader, reasoning_steps=reasoning_steps, temp=0.1)
     for i, pred in enumerate(preds):
         print()
         print(f'Question {i}:', pred[0])

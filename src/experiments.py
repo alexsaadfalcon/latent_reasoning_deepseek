@@ -38,7 +38,7 @@ def get_model_predictions(model, tokenizer, dataloader, reasoning_steps=30, temp
             predictions = []
             eos_token_id = tokenizer.eos_token_id
 
-            a_start = question.shape[1] + 9
+            a_start = question.shape[1]
             outputs = [tokenizer.decode(output_tokens[i, a_start:-1], skip_special_tokens=True) for i in range(batch_size)]
             eos_string = '<｜end▁of▁sentence｜>'
             predictions = [o.replace(eos_string, '').strip() for o in outputs]
