@@ -1,4 +1,6 @@
+import os
 import torch
+import pickle
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -89,7 +91,11 @@ if __name__ == '__main__':
     temp = 0.1
 
     dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
-    attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
+    if not os.path.exists('attention.pkl'):
+        attentions, latents, q_lens, a_lens = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
+        pickle.dump((attentions, latents, q_lens, a_lens), open('attention.pkl', 'wb'))
+    else:
+        attentions, latents, q_lens, a_lens = pickle.load(open('attention.pkl', 'rb'))
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
