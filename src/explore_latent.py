@@ -123,23 +123,38 @@ if __name__ == '__main__':
 
     # show cosine alignment between latents for sample 0
     # Calculate pairwise cosine similarity for latents from first sample
-    sample_latents = latents[0]  # Shape: [num_steps, hidden_dim]
-    # trim to just the latent tokens
-    sample_latents = sample_latents[q_lens[0]:q_lens[0] + reasoning_steps]
+    for i in range(5):
+      sample_latents = latents[i]  # Shape: [num_steps, hidden_dim]
+      # trim to just the latent tokens
+      sample_latents = sample_latents[q_lens[0]:q_lens[0] + reasoning_steps]
+      
+      # Compute cosine similarity matrix
+      with torch.no_grad():
+        norm = torch.norm(sample_latents, dim=1, keepdim=True)
+        normalized_latents = sample_latents / norm
+        cosine_sim = torch.mm(normalized_latents, normalized_latents.t())
+      
+      # Plot the similarity matrix
+      plt.figure()
+      plt.imshow(cosine_sim.cpu().numpy())
+      plt.colorbar()
+      plt.title("Pairwise Cosine Similarity of Latents")
+      plt.xlabel("Latent Step")
+      plt.ylabel("Latent Step") 
     
-    # Compute cosine similarity matrix
     with torch.no_grad():
-      norm = torch.norm(sample_latents, dim=1, keepdim=True)
-      normalized_latents = sample_latents / norm
-      cosine_sim = torch.mm(normalized_latents, normalized_latents.t())
-    
-    # Plot the similarity matrix
+      last_latent = [latents[i, -1, :] for i in range(len(latents))]
+      last_latent = torch.cat(last_latent, dim=0)
+      norm = torch.norm(last_latent, dim=1, keepdim=True)
+      norm_last_latent = last_latent / norm
+      last_latent_cosine_sim = torch.mm(norm_last_latent, norm_last_latent.t())
+
     plt.figure()
-    plt.imshow(cosine_sim.cpu().numpy())
+    plt.imshow(last_latent_cosine_sim.cpu().numpy())
     plt.colorbar()
-    plt.title("Pairwise Cosine Similarity of Latents")
+    plt.title("Pairwise Cosine Similarity of Last Latent")
     plt.xlabel("Latent Step")
-    plt.ylabel("Latent Step") 
+    plt.ylabel("Latent Step")
 
     plt.show()
     
