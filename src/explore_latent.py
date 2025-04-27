@@ -39,11 +39,16 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
             attentions.append(attention)
     
     attentions_ = []
-    # zero pad all attentions to have the same shape in dimension 2, sequence length
+    # attentions have shape (batch, layer, head, seq_len, seq_len)
+    # zero pad all attentions to have the same shape in dimension 3-4
+    longest_seq = max(_a.shape[4] for _a in attentions)
+    n_layers = attentions[0].shape[1]
+    n_heads = attentions[0].shape[2]
+    att_shape = (1, n_layers, n_heads, longest_seq, longest_seq)
     for att in attentions:
-        att_pad = torch.zeros_like(attentions[-1])
-        seq_len = att.shape[2]
-        att_pad[:, :, :seq_len, :, :] = att
+        att_pad = torch.zeros(att_shape)
+        seq_len = att.shape[4]
+        att_pad[:, :, :, :seq_len, :seq_len] = att
         attentions_.append(att_pad)
     attentions = attentions_
 
@@ -51,7 +56,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
 
 
 if __name__ == '__main__':
-    batch_size = 2
+    batch_size = 1
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
