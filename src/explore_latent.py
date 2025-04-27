@@ -37,6 +37,7 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
             )
             attention = torch.stack(attention, dim=1)
             attentions.append(attention)
+            break
     
     attentions_ = []
     # attentions have shape (batch, layer, head, seq_len, seq_len)
@@ -71,26 +72,10 @@ if __name__ == '__main__':
 
     dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
     attentions = get_model_attention(model, tokenizer, dataloader, reasoning_steps, temp)
-    print(attentions.shape)
-    exit()
 
-    fig, axs = plt.subplots(2, 2, figsize=(12, 10))
-    fig.suptitle(f'Attention Heads Visualization {input_ids.shape[1]} Question Tokens')
-    
-    # Plot 4 attention heads in a 2x2 grid
-    for row in range(2):
-        for col in range(2):
-            head_idx = row * 2 + col
-            ax = axs[row, col]
-            attention_matrix = last_layer_attention[0, head_idx].detach().log10().cpu().numpy()
-            im = ax.imshow(attention_matrix, cmap='viridis')
-            ax.set_title(f'Head {head_idx}')
-            ax.set_xlabel('Key tokens')
-            ax.set_ylabel('Query tokens')
-    
-    plt.colorbar(im, ax=axs.ravel().tolist())
-    plt.tight_layout()
-    plt.savefig(f'attention_matrix_step_{i}.png')
-    # plt.close()
+    attention_ave = torch.mean(attentions, dim=(0, 1, 2)).log10()
+    plt.figure()
+    plt.imshow(attention_ave)
+    plt.colorbar()
     plt.show()
     
