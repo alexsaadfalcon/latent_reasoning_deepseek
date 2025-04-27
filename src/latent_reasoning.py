@@ -148,6 +148,93 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
     
     return all_embeddings, all_attention_mask, token_types
 
+def latent_reasoning_forward_detach_fix(model, input_ids, attention_mask, reasoning_steps=30):
+    """
+    Generate text with latent reasoning steps before visible token generation.
+    Detach the latent reasoning steps so memory doesn't grow quadratically.
+    Each step has gradients based only on the previous step's output.
+    
+    Args:
+        model: The language model
+        input_ids: the tokenized prompt
+        reasoning_steps: Number of latent reasoning steps
+        max_new_tokens: Maximum number of visible tokens to generate
+        
+    Returns:
+        Generated text with reasoning steps masked
+    """
+    device = next(model.parameters()).device
+    
+    # Tokenize the prompt
+    B = input_ids.shape[0]
+    prompt_length = input_ids.shape[1]
+    
+    # Get initial embeddings
+    embedding_layer = model.get_input_embeddings()
+    prompt_embeddings = embedding_layer(input_ids)
+    
+    # Initialize our tracking variables
+    all_embeddings = prompt_embeddings
+    all_attention_mask = attention_mask
+    
+    # Keep track of which positions are latent reasoning steps
+    # 0 = prompt token, 1 = latent reasoning, 2 = generated token
+    token_types = torch.zeros((1, prompt_length), device=device)  # Start with all prompt tokens
+    
+    # Phase 1: Latent reasoning steps
+    # torch.set_grad_enabled(False)
+    for step in range(reasoning_steps):
+        # if step == reasoning_steps - 1:
+        #     torch.set_grad_enabled(True)
+        # Forward pass with current embeddings
+        outputs = model(
+            inputs_embeds=all_embeddings,
+            attention_mask=all_attention_mask,
+            output_hidden_states=True
+        )
+        
+        # Get the last hidden state
+        last_hidden_state = outputs.hidden_states[-1][:, -1:, :]
+
+        # Detach all previous embeddings except the most recent one
+        last_token = all_embeddings[:, -1:, :]
+        last_token = last_token.contiguous()
+        last_token.requires_grad_(True)
+
+        # Detach all but last token
+        all_embeddings = torch.cat([
+            last_token.detach(),
+            last_hidden_state
+        ], dim=1)
+
+        # Append the hidden state to our embeddings
+        # all_embeddings = torch.cat([all_embeddings, last_hidden_state], dim=1)
+        
+        # Update attention mask
+        all_attention_mask = torch.cat([
+            all_attention_mask,
+            torch.ones((B, 1), device=device)
+        ], dim=1)
+        
+        # Mark this position as a latent reasoning step
+        token_types = torch.cat([
+            token_types,
+            torch.ones((1, 1), device=device)  # 1 = latent reasoning
+        ], dim=1)
+        
+        # Check VRAM usage
+        # if torch.cuda.is_available():
+        #     allocated = torch.cuda.memory_allocated() / (1024 ** 3)  # Convert to GB
+        #     reserved = torch.cuda.memory_reserved() / (1024 ** 3)    # Convert to GB
+        #     print(f"VRAM usage - Step {step}: Allocated: {allocated:.2f} GB, Reserved: {reserved:.2f} GB")
+            
+        #     # Print shapes to debug memory growth
+        #     print(f"Shapes - embeddings: {all_embeddings.shape}, attention_mask: {all_attention_mask.shape}")
+    
+    return all_embeddings, all_attention_mask, token_types
+
+latent_reasoning_forward_detach = latent_reasoning_forward_detach_fix
+
 def latent_reasoning_forward_one_step_gradients(model, input_ids, attention_mask, reasoning_steps=15):
     """
     Generate text with latent reasoning steps where gradients flow back one step at a time.
