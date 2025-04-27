@@ -72,6 +72,7 @@ def main(learning_rate, num_epochs, reasoning_steps, lora_dim):
     )
     
     model.eval()
+    dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128, test=True)
     acc = evaluate_accuracy(model, tokenizer, dataloader, reasoning_steps=reasoning_steps)
     
     with open('results.json', 'w') as f:
