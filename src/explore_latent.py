@@ -1,6 +1,7 @@
 import os
 import torch
 import pickle
+import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -75,6 +76,13 @@ def get_model_attention(model, tokenizer, dataloader, reasoning_steps=30, temp=0
 
     return attentions, latents, q_lens, a_lens
 
+def matching_pursuit(latents, embedding, n_nonzero=1):
+    from sklearn.linear_model import OrthogonalMatchingPursuit
+    omp = OrthogonalMatchingPursuit(n_nonzero_coefs=n_nonzero)
+    omp.fit(embedding.numpy(), latents.numpy())
+    coef = omp.coef_
+    return coef
+
 
 if __name__ == '__main__':
     batch_size = 1
@@ -102,6 +110,11 @@ if __name__ == '__main__':
     if not os.path.exists(att_name):
         model = AutoModelForCausalLM.from_pretrained(model_name)
         model.to(device)
+        if not os.path.exists('emb.txt'):
+            emb = model.get_input_embeddings().weight.detach().numpy()
+            np.savetxt('emb.txt', emb)
+        else:
+            emb = np.loadtxt('emb.txt')
 
         lora_dim = 32
         apply_lora(model, lora_dim=lora_dim)
@@ -111,6 +124,7 @@ if __name__ == '__main__':
         pickle.dump((attentions, latents, q_lens, a_lens), open(att_name, 'wb'))
     else:
         attentions, latents, q_lens, a_lens = pickle.load(open(att_name, 'rb'))
+        emb = np.loadtxt('emb.txt')
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
