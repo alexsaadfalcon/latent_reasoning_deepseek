@@ -96,7 +96,7 @@ if __name__ == '__main__':
         att_name = 'attention_gsm8k.pkl'
         model_name = 'finetuned_latent_5.bin'
         dataloader = get_gsm8k_latent_dataloader(tokenizer, batch_size=batch_size, block_size=128, test=True)
-        dataloader = TrimmedDataset(dataloader, 10)
+        dataloader = TrimmedDataset(dataloader, 100)
     elif dataset == 'combinatorics':
         att_name = 'attention_combo.pkl'
         model_name = 'finetuned_latent_combo_30_0.bin'
