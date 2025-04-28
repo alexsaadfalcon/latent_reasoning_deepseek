@@ -87,6 +87,9 @@ def matching_pursuit(latents, embedding, n_nonzero=1):
     coef = omp.coef_
     return coef
 
+def get_logits(latents, embedding):
+    return embedding.T @ latents
+
 
 if __name__ == '__main__':
     batch_size = 1
@@ -106,19 +109,19 @@ if __name__ == '__main__':
         dataloader = TrimmedDataset(dataloader, 40)
     elif dataset == 'combinatorics':
         att_name = 'attention_combo.pkl'
-        model_fname = 'finetuned_latent_combo_30_0.bin'
-        dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256, test=True)
+        model_fname = 'finetuned_latent_combo_30_1.bin'
+        dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256, test=False)
     else:
         raise ValueError()
     
     if not os.path.exists(att_name):
         model = AutoModelForCausalLM.from_pretrained(model_name)
         model.to(device)
-        if not os.path.exists('emb.txt'):
-            emb = model.get_input_embeddings().weight.detach().numpy()
-            np.savetxt('emb.txt', emb)
+        if not os.path.exists('emb2.txt'):
+            emb = model.get_output_embeddings().weight.detach().numpy()
+            np.savetxt('emb2.txt', emb)
         else:
-            emb = np.loadtxt('emb.txt')
+            emb = np.loadtxt('emb2.txt')
 
         lora_dim = 32
         apply_lora(model, lora_dim=lora_dim)
@@ -128,30 +131,36 @@ if __name__ == '__main__':
         pickle.dump((responses, attentions, latents, q_lens, a_lens), open(att_name, 'wb'))
     else:
         responses, attentions, latents, q_lens, a_lens = pickle.load(open(att_name, 'rb'))
-        emb = np.loadtxt('emb.txt')
+        emb = np.loadtxt('emb2.txt')
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
     for l, latent in enumerate(latents):
+        # break
         print('question', responses[l])
         for i in range(q_lens[0]-1, q_lens[0]+reasoning_steps):
-            coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
+            # coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
+            coef = get_logits(latent[i].detach().numpy(), emb.T)
             # compute the top tokens according to coef
             # Get indices of top 5 nonzero coefficients by magnitude
-            top_indices = np.abs(coef).argsort()[-5:][::-1]
+            top_indices = np.abs(coef).argsort()[-10:][::-1]
             top_tokens = [tokenizer.decode([j]) for j in top_indices]
             print('top tokens:', top_tokens)
             # plt.figure()
             # plt.suptitle(f'{top_tokens}')
             # plt.stem(coef)
             # plt.show()
-    input()
+    print('done latent logits')
 
     for i in range(5):
-      attention_ave = torch.mean(attentions[i:i+1], dim=(0, 1, 2)).log10()
-      plt.figure()
-      plt.imshow(attention_ave)
-      plt.colorbar()
+        attention_ave = torch.mean(attentions[i:i+1], dim=(0, 1, 2)).log10()
+        re_start = q_lens[i]
+        re_end = re_start + reasoning_steps
+        attention_ave_trim = attention_ave#[re_start:re_end, re_end:]
+        plt.figure()
+        plt.suptitle(f'{re_start} : {re_end}')
+        plt.imshow(attention_ave_trim, aspect='auto')
+        plt.colorbar()
 
     # show cosine alignment between latents for sample 0
     # Calculate pairwise cosine similarity for latents from first sample
