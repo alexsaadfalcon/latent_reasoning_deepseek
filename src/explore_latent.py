@@ -201,8 +201,8 @@ if __name__ == '__main__':
     plt.imshow(last_latent_cosine_sim.cpu().numpy())
     plt.colorbar()
     plt.title("Pairwise Cosine Similarity of Last Latent")
-    plt.xlabel("Latent Step")
-    plt.ylabel("Latent Step")
+    plt.xlabel("Question Number")
+    plt.ylabel("Question Number")
 
     plt.show()
     
