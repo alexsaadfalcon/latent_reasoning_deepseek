@@ -135,7 +135,7 @@ if __name__ == '__main__':
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
-    latent_f = open('latent_reasoning_logits.txt', 'w')
+    latent_f = open('latent_reasoning_logits.txt', 'w', encoding='utf-8')
     for l, latent in enumerate(latents):
         # break
         print('question', responses[l])
