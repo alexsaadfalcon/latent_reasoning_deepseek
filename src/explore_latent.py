@@ -135,9 +135,12 @@ if __name__ == '__main__':
     print(attentions.shape, latents.shape)
     print(q_lens, a_lens)
 
+    latent_f = open('latent_reasoning_logits.txt', 'w')
     for l, latent in enumerate(latents):
         # break
         print('question', responses[l])
+        latent_f.write(f'{responses[l]}')
+        latent_f.write('\n')
         for i in range(q_lens[0]-1, q_lens[0]+reasoning_steps):
             # coef = matching_pursuit(latent[i].detach().numpy(), emb.T, n_nonzero=5)
             coef = get_logits(latent[i].detach().numpy(), emb.T)
@@ -146,11 +149,14 @@ if __name__ == '__main__':
             top_indices = np.abs(coef).argsort()[-10:][::-1]
             top_tokens = [tokenizer.decode([j]) for j in top_indices]
             print('top tokens:', top_tokens)
+            latent_f.write(f'{top_tokens}')
+            latent_f.write('\n')
             # plt.figure()
             # plt.suptitle(f'{top_tokens}')
             # plt.stem(coef)
             # plt.show()
     print('done latent logits')
+    latent_f.close()
 
     for i in range(5):
         attention_ave = torch.mean(attentions[i:i+1], dim=(0, 1, 2)).log10()
