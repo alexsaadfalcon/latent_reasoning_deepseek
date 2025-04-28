@@ -148,7 +148,7 @@ def latent_reasoning_forward_detach(model, input_ids, attention_mask, reasoning_
     
     return all_embeddings, all_attention_mask, token_types
 
-def latent_reasoning_forward_detach_fix(model, input_ids, attention_mask, reasoning_steps=30):
+def latent_reasoning_forward_detach_(model, input_ids, attention_mask, reasoning_steps=30):
     """
     Generate text with latent reasoning steps before visible token generation.
     Detach the latent reasoning steps so memory doesn't grow quadratically.
@@ -232,8 +232,6 @@ def latent_reasoning_forward_detach_fix(model, input_ids, attention_mask, reason
         #     print(f"Shapes - embeddings: {all_embeddings.shape}, attention_mask: {all_attention_mask.shape}")
     
     return all_embeddings, all_attention_mask, token_types
-
-latent_reasoning_forward_detach = latent_reasoning_forward_detach_fix
 
 def latent_reasoning_forward_one_step_gradients(model, input_ids, attention_mask, reasoning_steps=15):
     """

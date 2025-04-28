@@ -35,7 +35,7 @@ def main():
     
     # Apply LoRA to the model
     print("Applying LoRA to the model")
-    lora_dim = 16
+    lora_dim = 32
     apply_lora(model, lora_dim=lora_dim)
     
     # Set up data
@@ -44,8 +44,8 @@ def main():
     dataloader = get_combo_latent_dataloader(tokenizer, batch_size=batch_size, block_size=256)
     
     # Set up optimizer and scheduler
-    learning_rate = 1e-5
-    num_epochs = 100
+    learning_rate = 1e-4
+    num_epochs = 50
     gradient_accumulation_steps = 2
     
     optimizer = torch.optim.AdamW(
