@@ -1,0 +1,481 @@
+[
+  {
+    "exercise": "2.1",
+    "text": "Let C ⊆ R^n be a convex set, with x_1,...,x_k ∈ C, and let θ_1,...,θ_k ∈ R satisfy θ_i ≥ 0, θ_1 + ... + θ_k = 1. Show that θ_1x_1 + ... + θ_kx_k ∈ C. (The definition of convexity is that this holds for k = 2; you must show it for arbitrary k.) Hint. Use induction on k.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.2",
+    "text": "Show that a set is convex if and only if its intersection with any line is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.2",
+    "text": "Show that a set is affine if and only if its intersection with any line is affine.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.3",
+    "text": "Midpoint convexity. A set C is midpoint convex if whenever two points a,b are in C, the average or midpoint (a + b)/2 is in C. Obviously a convex set is midpoint convex. It can be proved that under mild conditions midpoint convexity implies convexity. As a simple case, prove that if C is closed and midpoint convex, then C is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.4",
+    "text": "Show that the convex hull of a set S is the intersection of all convex sets that contain S. (The same method can be used to show that the conic, or affine, or linear hull of a set S is the intersection of all conic sets, or affine sets, or subspaces that contain S.)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.5",
+    "text": "What is the distance between two parallel hyperplanes {x ∈ R^n| a^T x = b_1} and {x ∈ R^n| a^T x = b_2}?",
+    "type": "answer-based",
+    "answer": "The distance is |b_1 - b_2| / ||a||."
+  },
+  {
+    "exercise": "2.6",
+    "text": "When does one halfspace contain another? Give conditions under which {x | a^T x ≤ b} ⊆ {x | a~^T x ≤ b~} (where a ≠ 0, a~ ≠ 0).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.6",
+    "text": "Find the conditions under which the two halfspaces {x | a^T x ≤ b} and {x | a~^T x ≤ b~} are equal.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.7",
+    "text": "Voronoi description of halfspace. Let a and b be distinct points in R^n. Show that the set of all points that are closer (in Euclidean norm) to a than b, i.e., {x | ||x-a||_2 ≤ ||x-b||_2}, is a halfspace.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.7",
+    "text": "Describe the halfspace {x | ||x-a||_2 ≤ ||x-b||_2} explicitly as an inequality of the form c^T x ≤ d. Draw a picture.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.8a",
+    "text": "Which of the following sets are polyhedra? If possible, express S in the form S = {x | Ax ≼ b, Fx = g}. S = {y_1a_1 + y_2a_2 | -1 ≤ y_1 ≤ 1, -1 ≤ y_2 ≤ 1}, where a_1, a_2 ∈ R^n.",
+    "type": "answer-based",
+    "answer": "S is a polyhedron."
+  },
+  {
+    "exercise": "2.8b",
+    "text": "Which of the following sets are polyhedra? If possible, express S in the form S = {x | Ax ≼ b, Fx = g}. S = {x ∈ R^n | x ≽ 0, 1^T x = 1, Σ(i=1 to n) x_ia_i = b_1, Σ(i=1 to n) x_ia_i^2 = b_2}, where a_1,...,a_n ∈ R and b_1, b_2 ∈ R.",
+    "type": "answer-based",
+    "answer": "S is a polyhedron."
+  },
+  {
+    "exercise": "2.8c",
+    "text": "Which of the following sets are polyhedra? If possible, express S in the form S = {x | Ax ≼ b, Fx = g}. S = {x ∈ R^n| x ≽ 0, x^T y ≤ 1 for all y with ||y||_2 = 1}.",
+    "type": "answer-based",
+    "answer": "S is not a polyhedron."
+  },
+  {
+    "exercise": "2.8d",
+    "text": "Which of the following sets are polyhedra? If possible, express S in the form S = {x | Ax ≼ b, Fx = g}. S = {x ∈ R^n| x ≽ 0, x^T y ≤ 1 for all y with Σ(i=1 to n) |y_i| = 1}.",
+    "type": "answer-based",
+    "answer": "S is a polyhedron."
+  },
+  {
+    "exercise": "2.9a",
+    "text": "Voronoi sets and polyhedral decomposition. Let x_0,...,x_K ∈ R^n. Consider the set of points that are closer (in Euclidean norm) to x_0 than the other x_i, i.e., V = {x ∈ R^n | ||x - x_0||_2 ≤ ||x - x_i||_2, i = 1,...,K}. V is called the Voronoi region around x_0 with respect to x_1,...,x_K. Show that V is a polyhedron. Express V in the form V = {x | Ax ≼ b}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.9b",
+    "text": "Conversely, given a polyhedron P with nonempty interior, show how to find x_0,...,x_K so that the polyhedron is the Voronoi region of x_0 with respect to x_1,...,x_K.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.9c",
+    "text": "We can also consider the sets V_k = {x ∈ R^n | ||x - x_k||_2 ≤ ||x - x_i||_2, i ≠ k}. The set V_k consists of points in R^n for which the closest point in the set {x_0,...,x_K} is x_k. The sets V_0,...,V_K give a polyhedral decomposition of R^n. More precisely, the sets V_k are polyhedra, ∪(k=0 to K) V_k = R^n, and int V_i ∩ int V_j = ∅ for i ≠ j, i.e., V_i and V_j intersect at most along a boundary. Suppose that P_1,...,P_m are polyhedra such that ∪(i=1 to m) P_i = R^n, and int P_i ∩ int P_j = ∅ for i ≠ j. Can this polyhedral decomposition of R^n be described as the Voronoi regions generated by an appropriate set of points?",
+    "type": "answer-based",
+    "answer": "No, this is not always possible."
+  },
+  {
+    "exercise": "2.10a",
+    "text": "Solution set of a quadratic inequality. Let C ⊆ R^n be the solution set of a quadratic inequality, C = {x ∈ R^n | x^T Ax + b^T x + c ≤ 0}, with A ∈ S^n, b ∈ R^n, and c ∈ R. Show that C is convex if A ≽ 0.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.10b",
+    "text": "Show that the intersection of C = {x ∈ R^n | x^T Ax + b^T x + c ≤ 0} and the hyperplane defined by g^T x + h = 0 (where g ≠ 0) is convex if A + λgg^T ≽ 0 for some λ ∈ R.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.10c",
+    "text": "Are the converses of these statements true? If C = {x ∈ R^n | x^T Ax + b^T x + c ≤ 0} is convex, is A ≽ 0?",
+    "type": "answer-based",
+    "answer": "No, the converse is not true."
+  },
+  {
+    "exercise": "2.10d",
+    "text": "Are the converses of these statements true? If the intersection of C and a hyperplane is convex, is A + λgg^T ≽ 0 for some λ?",
+    "type": "answer-based",
+    "answer": "No, the converse is not true."
+  },
+  {
+    "exercise": "2.11",
+    "text": "Hyperbolic sets. Show that the hyperbolic set {x ∈ R^2_+ | x_1x_2 ≥ 1} is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.11",
+    "text": "As a generalization, show that {x ∈ R^n_+ | Π(i=1 to n) x_i ≥ 1} is convex. Hint. If a,b ≥ 0 and 0 ≤ θ ≤ 1, then a^θ b^(1-θ) ≤ θa + (1-θ)b; see §3.1.9.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.12a",
+    "text": "Which of the following sets are convex? A slab, i.e., a set of the form {x ∈ R^n| α ≤ a^T x ≤ β}.",
+    "type": "answer-based",
+    "answer": "A slab is convex."
+  },
+  {
+    "exercise": "2.12b",
+    "text": "Which of the following sets are convex? A rectangle, i.e., a set of the form {x ∈ R^n| α_i ≤ x_i ≤ β_i, i = 1,...,n}. A rectangle is sometimes called a hyperrectangle when n > 2.",
+    "type": "answer-based",
+    "answer": "A rectangle is convex."
+  },
+  {
+    "exercise": "2.12c",
+    "text": "Which of the following sets are convex? A wedge, i.e., {x ∈ R^n| a^T_1 x ≤ b_1, a^T_2 x ≤ b_2}.",
+    "type": "answer-based",
+    "answer": "A wedge is convex."
+  },
+  {
+    "exercise": "2.12d",
+    "text": "Which of the following sets are convex? The set of points closer to a given point than a given set, i.e., {x | ||x - x_0||_2 ≤ ||x - y||_2 for all y ∈ S} where S ⊆ R^n.",
+    "type": "answer-based",
+    "answer": "The set of points closer to a given point than a given set is convex."
+  },
+  {
+    "exercise": "2.12e",
+    "text": "Which of the following sets are convex? The set of points closer to one set than another, i.e., {x | dist(x, S) ≤ dist(x, T)}, where S, T ⊆ R^n, and dist(x, S) = inf{||x - z||_2 | z ∈ S}.",
+    "type": "answer-based",
+    "answer": "Not convex."
+  },
+  {
+    "exercise": "2.12f",
+    "text": "Which of the following sets are convex? [HUL93, volume 1, page 93] The set {x | x + S_2 ⊆ S_1}, where S_1, S_2 ⊆ R^n with S_1 convex.",
+    "type": "answer-based",
+    "answer": "Convex."
+  },
+  {
+    "exercise": "2.12g",
+    "text": "Which of the following sets are convex? The set of points whose distance to a does not exceed a fixed fraction θ of the distance to b, i.e., the set {x | ||x - a||_2 ≤ θ||x - b||_2}. You can assume a ≠ b and 0 ≤ θ ≤ 1.",
+    "type": "answer-based",
+    "answer": "Convex."
+  },
+  {
+    "exercise": "2.13",
+    "text": "Conic hull of outer products. Consider the set of rank-k outer products, defined as {XX^T | X ∈ R^n×k, rank X = k}. Describe its conic hull in simple terms.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.14a",
+    "text": "Expanded and restricted sets. Let S ⊆ R^n, and let || · || be a norm on R^n. For a ≥ 0 we define S_a as {x | dist(x, S) ≤ a}, where dist(x, S) = inf_{y∈S} ||x - y||. We refer to S_a as S expanded or extended by a. Show that if S is convex, then S_a is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.14b",
+    "text": "For a ≥ 0 we define S_-a = {x | B(x, a) ⊆ S}, where B(x, a) is the ball (in the norm || · ||), centered at x, with radius a. We refer to S_-a as S shrunk or restricted by a, since S_-a consists of all points that are at least a distance a from R^n\\S. Show that if S is convex, then S_-a is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.15a",
+    "text": "Some sets of probability distributions. Let x be a real-valued random variable with prob(x = a_i) = p_i, i = 1,...,n, where a_1 < a_2 < ... < a_n. Of course p ∈ R^n lies in the standard probability simplex P = {p | 1^T p = 1, p ≽ 0}. Which of the following conditions are convex in p? α ≤ E f(x) ≤ β, where E f(x) is the expected value of f(x), i.e., E f(x) = Σ(i=1 to n) p_i f(a_i). (The function f: R → R is given.)",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.15b",
+    "text": "Which of the following conditions are convex in p? prob(x > α) ≤ β.",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.15c",
+    "text": "Which of the following conditions are convex in p? E |x^3| ≤ α E |x|.",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.15d",
+    "text": "Which of the following conditions are convex in p? E x^2 ≤ α.",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.15e",
+    "text": "Which of the following conditions are convex in p? E x^2 ≥ α.",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.15f",
+    "text": "Which of the following conditions are convex in p? var(x) ≤ α, where var(x) = E(x - E x)^2 is the variance of x.",
+    "type": "answer-based",
+    "answer": "Not convex in p."
+  },
+  {
+    "exercise": "2.15g",
+    "text": "Which of the following conditions are convex in p? var(x) ≥ α.",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.15h",
+    "text": "Which of the following conditions are convex in p? quartile(x) ≥ α, where quartile(x) = inf{β | prob(x ≤ β) ≥ 0.25}.",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.15i",
+    "text": "Which of the following conditions are convex in p? quartile(x) ≤ α.",
+    "type": "answer-based",
+    "answer": "Convex in p."
+  },
+  {
+    "exercise": "2.16",
+    "text": "Show that if S_1 and S_2 are convex sets in R^m×n, then so is their partial sum S = {(x, y_1 + y_2) | x ∈ R^m, y_1, y_2 ∈ R^n, (x, y_1) ∈ S_1, (x, y_2) ∈ S_2}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.17a",
+    "text": "Image of polyhedral sets under perspective function. In this problem we study the image of hyperplanes, halfspaces, and polyhedra under the perspective function P(x,t) = x/t, with dom P = R^n × R_++. For each of the following sets C, give a simple description of P(C) = {v/t | (v,t) ∈ C, t > 0}. The polyhedron C = conv{(v_1,t_1), . . . ,(v_K,t_K)} where v_i ∈ R^n and t_i > 0.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.17b",
+    "text": "Give a simple description of P(C) = {v/t | (v,t) ∈ C, t > 0} where C = {(v,t) | f^T v + gt = h} (with f and g not both zero).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.17c",
+    "text": "Give a simple description of P(C) = {v/t | (v,t) ∈ C, t > 0} where C = {(v,t) | f^T v + gt ≤ h} (with f and g not both zero).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.17d",
+    "text": "Give a simple description of P(C) = {v/t | (v,t) ∈ C, t > 0} where C = {(v,t) | Fv + gt ≼ h}.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.18",
+    "text": "Invertible linear-fractional functions. Let f: R^n → R^n be the linear-fractional function f(x) = (Ax + b)/(c^T x + d), dom f = {x | c^T x + d > 0}. Suppose the matrix Q = [[A b], [c^T d]] is nonsingular. Show that f is invertible and that f^-1 is a linear-fractional mapping. Give an explicit expression for f^-1 and its domain in terms of A, b, c, and d. Hint. It may be easier to express f^-1 in terms of Q.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.19a",
+    "text": "Linear-fractional functions and convex sets. Let f: R^m → R^n be the linear-fractional function f(x) = (Ax + b)/(c^T x + d), dom f = {x | c^T x + d > 0}. In this problem we study the inverse image of a convex set C under f, i.e., f^-1(C) = {x ∈ dom f | f(x) ∈ C}. For each of the following sets C ⊆ R^n, give a simple description of f^-1(C). The halfspace C = {y | g^T y ≤ h} (with g ≠ 0).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.19b",
+    "text": "Give a simple description of f^-1(C) where C = {y | Gy ≼ h}.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.19c",
+    "text": "Give a simple description of f^-1(C) where C = {y | y^T P^-1 y ≤ 1} (where P ∈ S^n_++).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.19d",
+    "text": "Give a simple description of f^-1(C) where C = {y | y_1A_1 + ... + y_nA_n ≼ B}, where A_1, ..., A_n, B ∈ S^p.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.20",
+    "text": "Strictly positive solution of linear equations. Suppose A ∈ R^m×n, b ∈ R^m. Show that there exists an x satisfying x ≻ 0, Ax = b if and only if there exists no λ with A^T λ ≽ 0, A^T λ ≠ 0, b^T λ ≤ 0. Hint. First prove the following fact from linear algebra: c^T x = d for all x satisfying Ax = b if and only if there is a vector λ such that c = A^T λ, d = b^T λ.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.21",
+    "text": "The set of separating hyperplanes. Suppose that C and D are disjoint subsets of R^n. Consider the set of (a, b) ∈ R^n+1 for which a^T x ≤ b for all x ∈ C, and a^T x ≥ b for all x ∈ D. Show that this set is a convex cone (which is the singleton {0} if there is no hyperplane that separates C and D).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.22",
+    "text": "Finish the proof of the separating hyperplane theorem in §2.5.1: Show that a separating hyperplane exists for two disjoint convex sets C and D. You can use the result proved in §2.5.1, i.e., that a separating hyperplane exists when there exist points in the two sets whose distance is equal to the distance between the two sets. Hint. If C and D are disjoint convex sets, then the set {x - y | x ∈ C, y ∈ D} is convex and does not contain the origin.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.23",
+    "text": "Give an example of two closed convex sets that are disjoint but cannot be strictly separated.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.24a",
+    "text": "Supporting hyperplanes. Express the closed convex set {x ∈ R^2_+ | x_1x_2 ≥ 1} as an intersection of halfspaces.",
+    "type": "answer-based",
+    "answer": "The closed convex set {x ∈ R^2_+ | x_1x_2 ≥ 1} can be expressed as an intersection of halfspaces {x | x_1/t^2 + x_2 >= 2/t} for all t > 0."
+  },
+  {
+    "exercise": "2.24b",
+    "text": "Let C = {x ∈ R^n | ||x||_∞ ≤ 1}, the l_∞-norm unit ball in R^n, and let x^ be a point in the boundary of C. Identify the supporting hyperplanes of C at x^ explicitly.",
+    "type": "answer-based",
+    "answer": "The x_i = ±1 is a supporting hyperplane of x^ if and only x^_i = ±1."
+  },
+  {
+    "exercise": "2.25",
+    "text": "Inner and outer polyhedral approximations. Let C ⊆ R^n be a closed convex set, and suppose that x_1,...,x_K are on the boundary of C. Suppose that for each i, a^T_i (x-x_i) = 0 defines a supporting hyperplane for C at x_i, i.e., C ⊆ {x | a^T_i (x - x_i) ≤ 0}. Consider the two polyhedra P_inner = conv{x_1,...,x_K}, P_outer = {x | a^T_i (x - x_i) ≤ 0, i = 1,...,K}. Show that P_inner ⊆ C ⊆ P_outer. Draw a picture illustrating this.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.26",
+    "text": "Support function. The support function of a set C ⊆ R^n is defined as S_C(y) = sup{y^T x | x ∈ C}. (We allow S_C(y) to take on the value +∞.) Suppose that C and D are closed convex sets in R^n. Show that C = D if and only if their support functions are equal.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.27",
+    "text": "Converse supporting hyperplane theorem. Suppose the set C is closed, has nonempty interior, and has a supporting hyperplane at every point in its boundary. Show that C is convex.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.28",
+    "text": "Positive semidefinite cone for n = 1, 2, 3. Give an explicit description of the positive semidefinite cone S^n_+, in terms of the matrix coefficients and ordinary inequalities, for n = 1, 2, 3. To describe a general element of S^n, for n = 1, 2, 3, use the notation x_1, [[x_1, x_2], [x_2, x_3]], [[x_1, x_2, x_3], [x_2, x_4, x_5], [x_3, x_5, x_6]].",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.29a",
+    "text": "Cones in R^2. Suppose K ⊆ R^2 is a closed convex cone. Give a simple description of K in terms of the polar coordinates of its elements (x = r(cos φ, sin φ) with r ≥ 0).",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.29b",
+    "text": "Give a simple description of K^*, and draw a plot illustrating the relation between K and K^*.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.29c",
+    "text": "When is K pointed?",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.29d",
+    "text": "When is K proper (hence, defines a generalized inequality)? Draw a plot illustrating what x ≼_K y means when K is proper.",
+    "type": "open-ended"
+  },
+  {
+    "exercise": "2.30",
+    "text": "Properties of generalized inequalities. Prove the properties of (nonstrict and strict) generalized inequalities listed in §2.4.1.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.31a",
+    "text": "Properties of dual cones. Let K^* be the dual cone of a convex cone K, as defined in (2.19). Prove that K^* is indeed a convex cone.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.31b",
+    "text": "Properties of dual cones. Prove that K_1 ⊆ K_2 implies K^*_2 ⊆ K^*_1.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.31c",
+    "text": "Properties of dual cones. Prove that K^* is closed.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.31d",
+    "text": "Properties of dual cones. Prove that the interior of K^* is given by int K^* = {y | y^T x > 0 for all x ∈ K}.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.31e",
+    "text": "Properties of dual cones. Prove that if K has nonempty interior then K^* is pointed.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.31f",
+    "text": "Properties of dual cones. Prove that K^** is the closure of K. (Hence if K is closed, K^** = K.)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.31g",
+    "text": "Properties of dual cones. Prove that if the closure of K is pointed then K^* has nonempty interior.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.32",
+    "text": "Find the dual cone of {Ax | x ≽ 0}, where A ∈ R^m×n.",
+    "type": "answer-based",
+    "answer": "The dual cone is {y | A^T y ≽ 0}."
+  },
+  {
+    "exercise": "2.33a",
+    "text": "The monotone nonnegative cone. We define the monotone nonnegative cone as K_m+ = {x ∈ R^n | x_1 ≥ x_2 ≥ ... ≥ x_n ≥ 0}, i.e., all nonnegative vectors with components sorted in nonincreasing order. Show that K_m+ is a proper cone.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.33b",
+    "text": "Find the dual cone K^*_m+. Hint. Use the identity Σ(i=1 to n) x_i y_i = (x_1 - x_2)y_1 + (x_2 - x_3)(y_1 + y_2) + (x_3 - x_4)(y_1 + y_2 + y_3) + ... + (x_(n-1) - x_n)(y_1 + ... + y_(n-1)) + x_n(y_1 + ... + y_n).",
+    "type": "answer-based",
+    "answer": "The dual cone is {y| Σ(i=1 to k) y_i >= 0 for all k = 1,...,n}."
+  },
+  {
+    "exercise": "2.34a",
+    "text": "The lexicographic cone and ordering. The lexicographic cone is defined as K_lex = {0} ∪ {x ∈ R^n | x_1 = ... = x_k = 0, x_(k+1) > 0, for some k, 0 ≤ k < n}, i.e., all vectors whose first nonzero coefficient (if any) is positive. Verify that K_lex is a cone, but not a proper cone.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.34b",
+    "text": "We define the lexicographic ordering on R^n as follows: x ≤_lex y if and only if y - x ∈ K_lex. (Since K_lex is not a proper cone, the lexicographic ordering is not a generalized inequality.) Show that the lexicographic ordering is a linear ordering: for any x, y ∈ R^n, either x ≤_lex y or y ≤_lex x. Therefore any set of vectors can be sorted with respect to the lexicographic cone, which yields the familiar sorting used in dictionaries.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.34c",
+    "text": "Find K^*_lex.",
+    "type": "answer-based",
+    "answer": "K^*_lex = {(t, 0, ..., 0) | t >= 0}."
+  },
+  {
+    "exercise": "2.35",
+    "text": "Copositive matrices. A matrix X ∈ S^n is called copositive if z^T Xz ≥ 0 for all z ≽ 0. Verify that the set of copositive matrices is a proper cone. Find its dual cone.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.36",
+    "text": "Euclidean distance matrices. Let x_1,...,x_n ∈ R^k. The matrix D ∈ S^n defined by D_ij = ||x_i - x_j||^2_2 is called a Euclidean distance matrix. It satisfies some obvious properties such as D_ij = D_ji, D_ii = 0, D_ij ≥ 0, and (from the triangle inequality) D^(1/2)_ik ≤ D^(1/2)_ij + D^(1/2)_jk. We now pose the question: When is a matrix D ∈ S^n a Euclidean distance matrix (for some points in R^k, for some k)? A famous result answers this question: D ∈ S^n is a Euclidean distance matrix if and only if D_ii = 0 and x^T Dx ≤ 0 for all x with 1^T x = 0. (See §8.3.3.) Show that the set of Euclidean distance matrices is a convex cone. Find the dual cone.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.37a",
+    "text": "Nonnegative polynomials and Hankel LMIs. Let K_pol be the set of (coefficients of) nonnegative polynomials of degree 2k on R: K_pol = {x ∈ R^(2k+1) | x_1 + x_2t + x_3t^2 + ... + x_(2k+1)t^(2k) ≥ 0 for all t ∈ R}. Show that K_pol is a proper cone.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.37b",
+    "text": "A basic result, known as the Markov-Lucacs theorem, states that a polynomial of degree 2k is nonnegative on R if and only if it can be expressed as the sum of squares of two polynomials of degree k or less. In other words, x ∈ K_pol if and only if the polynomial p(t) = x_1 + x_2t + x_3t^2 + ... + x_(2k+1)t^(2k) can be expressed as p(t) = r(t)^2 + s(t)^2 where r and s are polynomials of degree k. Use the Markov-Lucacs theorem to show that K_pol = {x ∈ R^(2k+1) | x_i = Σ_(m+n=i+1) Y_mn for some Y ∈ S^(k+1)_+}. In other words, p(t) = x_1 + x_2t + x_3t^2 + ... + x_(2k+1)t^(2k) is nonnegative if and only if there exists a matrix Y ∈ S^(k+1)_+ such that x_1 = Y_11, x_2 = Y_12 + Y_21, x_3 = Y_13 + Y_22 + Y_31, ..., x_(2k+1) = Y_(k+1,k+1).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.37c",
+    "text": "Show that K^*_pol = K_han where K_han = {z ∈ R^(2k+1) | H(z) ≽ 0} and H(z) = [[z_1, z_2, z_3, ..., z_k, z_(k+1)], [z_2, z_3, z_4, ..., z_(k+1), z_(k+2)], [z_3, z_4, z_5, ..., z_(k+2), z_(k+4)], [..., ..., ..., ..., ..., ...], [z_k, z_(k+1), z_(k+2), ..., z_(2k-1), z_(2k)], [z_(k+1), z_(k+2), z_(k+3), ..., z_(2k), z_(2k+1)]]. (This is the Hankel matrix with coefficients z_1,...,z_(2k+1).)",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.37d",
+    "text": "Let K_mom be the conic hull of the set of all vectors of the form (1,t,t^2,...,t^(2k)), where t ∈ R. Show that y ∈ K_mom if and only if y_1 ≥ 0 and y = y_1(1, E u, E u^2, ..., E u^(2k)) for some random variable u. In other words, the elements of K_mom are nonnegative multiples of the moment vectors of all possible distributions on R. Show that K_pol = K^*_mom.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.37e",
+    "text": "Combining the results of (c) and (d), conclude that K_han = cl K_mom. As an example illustrating the relation between K_mom and K_han, take k = 2 and z = (1,0,0,0,1). Show that z ∈ K_han, z ∉ K_mom. Find an explicit sequence of points in K_mom which converge to z.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.38a",
+    "text": "[Roc70, pages 15, 61] Convex cones constructed from sets. The barrier cone of a set C is defined as the set of all vectors y such that y^T x is bounded above over x ∈ C. In other words, a nonzero vector y is in the barrier cone if and only if it is the normal vector of a halfspace {x | y^T x ≤ α} that contains C. Verify that the barrier cone is a convex cone (with no assumptions on C).",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.38b",
+    "text": "The recession cone (also called asymptotic cone) of a set C is defined as the set of all vectors y such that for each x ∈ C, x - ty ∈ C for all t ≥ 0. Show that the recession cone of a convex set is a convex cone. Show that if C is nonempty, closed, and convex, then the recession cone of C is the dual of the barrier cone.",
+    "type": "proof-based"
+  },
+  {
+    "exercise": "2.38c",
+    "text": "The normal cone of a set C at a boundary point x_0 is the set of all vectors y such that y^T (x - x_0) ≤ 0 for all x ∈ C (i.e., the set of vectors that define a supporting hyperplane to C at x_0). Show that the normal cone is a convex cone (with no assumptions on C). Give a simple description of the normal cone of a polyhedron {x | Ax ≼ b} at a point in its boundary.",
+    "type": "proof-based"
+  }
+]

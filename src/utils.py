@@ -2,6 +2,7 @@ import torch
 import json
 from torch.utils.data import IterableDataset
 
+
 def load_json(fname):
   with open(fname, 'r', encoding='utf-8') as file:
     data = json.load(file)
@@ -137,4 +138,5 @@ class TrimmedDataset(IterableDataset):
       if idx >= self.n_trim:
         break
       yield batch
+
 
