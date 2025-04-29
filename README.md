@@ -54,6 +54,13 @@ A framework for implementing latent reasoning techniques in mathematical problem
   - Provides utilities for running experiments
   - Handles model prediction and accuracy assessment
 
+### Analysis and Visualization
+- `explore_latent.py` - Latent space analysis tools
+  - Extracts and analyzes attention patterns
+  - Performs latent space visualization
+  - Implements orthogonal matching pursuit for latent interpretation
+  - Generates visualizations of reasoning steps and attention patterns
+
 ### Job Management
 - `main_job.py` - Job-specific training entry point
   - Handles command-line arguments for training jobs
