@@ -88,7 +88,7 @@
     "exercise": "3.14a",
     "text": "Convex-concave functions and saddle-points. We say the function f : R^n × R^m → R is convex-concave if f(x, z) is a concave function of z, for each fixed x, and a convex function of x, for each fixed z. We also require its domain to have the product form dom f = A × B, where A ⊆ R^n and B ⊆ R^m are convex. Give a second-order condition for a twice differentiable function f : R^n × R^m → R to be convex-concave, in terms of its Hessian ∇²f(x, z).",
     "type": "answer-based",
-    "answer": "∇²_{xx} f(x, z) ≽ 0 and ∇²_{zz} f(x, z) ≼ 0 for all (x, z)."
+    "answer": "∇²_{xx} f(x, z) ≽ 0 and ∇²_{zz} f(x, z) ≼ 0 for all (x, z)t."
   },
   {
     "exercise": "3.14b",
